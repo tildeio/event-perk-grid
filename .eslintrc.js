@@ -27,10 +27,13 @@ module.exports = {
     'prettier',
   ],
   rules: {
+    'class-methods-use-this': 'off',
     'eslint-comments/no-unused-disable': 'error',
+    'import/prefer-default-export': 'off',
+    'max-classes-per-file': 'off',
     // Too restrictive, writing ugly code to defend against a very unlikely scenario: https://eslint.org/docs/rules/no-prototype-builtins
     'no-prototype-builtins': 'off',
-    'import/prefer-default-export': 'off',
+    'no-underscore-dangle': 'off',
     // Use function hoisting to improve code readability
     'no-use-before-define': [
       'error',
@@ -47,6 +50,8 @@ module.exports = {
     'unicorn/prevent-abbreviations': 'off',
     // Airbnb prefers forEach
     'unicorn/no-array-for-each': 'off',
+    'unicorn/no-static-only-class': 'off',
+    'unicorn/no-null': 'off',
   },
   overrides: [
     {
