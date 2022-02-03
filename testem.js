@@ -1,6 +1,5 @@
 module.exports = {
-  framework: 'qunit',
-  src_files: ['dist/tests.js'],
+  test_page: 'tests/index.html?hidepassed',
   before_tests: 'yarn build:dev',
   launch_in_ci: ['Chrome'],
   launch_in_dev: ['Chrome'],

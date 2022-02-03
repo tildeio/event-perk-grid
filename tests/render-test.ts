@@ -1,4 +1,4 @@
-// import { module, test } from 'qunit';
+import { module, test } from 'qunit';
 import render from '../src/render';
 import {
   EVENT_DATA_FACTORY,
@@ -7,8 +7,8 @@ import {
   PERK_WITH_VALUE_FACTORY,
 } from './helpers/data-factory';
 
-QUnit.module('render', function () {
-  QUnit.test('it works', function (assert) {
+module('render', function () {
+  test('it works', function (assert) {
     const element = document.createElement('div');
     const shadow = element.attachShadow({ mode: 'open' });
 
@@ -30,5 +30,7 @@ QUnit.module('render', function () {
     render(shadow, data);
 
     assert.ok(shadow.querySelector('div'));
+    assert.ok(false);
+    // throw new Error('what');
   });
 });
