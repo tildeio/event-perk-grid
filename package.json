@@ -21,6 +21,7 @@
   "scripts": {
     "prebuild": "yarn clean",
     "build:dev": "webpack --mode='development' -c webpack.tests.config.js",
+    "build:testem": "TESTEM=true webpack --mode='development' -c webpack.tests.config.js",
     "build": "tsc",
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
@@ -28,6 +29,7 @@
     "lint:prettier:fix": "prettier --write .",
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel \"lint:!(fix)\"",
     "lint:fix": "npm-run-all --continue-on-error lint:*:fix",
+    "start": "webpack serve --open --mode development -c webpack.tests.config.js",
     "test": "testem",
     "clean": "rm -rf dist",
     "preversion": "yarn lint && yarn build && yarn test",
@@ -39,6 +41,7 @@
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "clean-webpack-plugin": "^4.0.0",
+    "css-loader": "^6.6.0",
     "eslint": "^8.7.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^16.1.0",
@@ -48,15 +51,17 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-qunit": "^7.2.0",
     "eslint-plugin-unicorn": "^40.1.0",
+    "html-webpack-plugin": "^5.5.0",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.5.1",
     "qunit": "^2.17.2",
-    "socket.io": "^4.4.1",
+    "style-loader": "^3.3.1",
     "testem": "^3.6.0",
     "ts-loader": "^9.2.6",
     "typescript": "^4.5.5",
     "webpack": "^5.68.0",
-    "webpack-cli": "^4.9.2"
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.7.4"
   },
   "volta": {
     "node": "14.18.3",

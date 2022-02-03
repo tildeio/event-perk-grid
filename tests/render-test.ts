@@ -30,7 +30,5 @@ module('render', function () {
     render(shadow, data);
 
     assert.ok(shadow.querySelector('div'));
-    assert.ok(false);
-    // throw new Error('what');
   });
 });
