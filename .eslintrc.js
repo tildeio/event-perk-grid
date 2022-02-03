@@ -6,15 +6,8 @@ module.exports = {
   },
   env: {
     browser: true,
-    'jest/globals': true,
   },
-  plugins: [
-    '@typescript-eslint',
-    'eslint-comments',
-    'jest',
-    'promise',
-    'unicorn',
-  ],
+  plugins: ['@typescript-eslint', 'eslint-comments', 'promise', 'unicorn'],
   extends: [
     'airbnb-base',
     'airbnb-typescript/base',
@@ -23,7 +16,6 @@ module.exports = {
     'plugin:eslint-comments/recommended',
     'plugin:promise/recommended',
     'plugin:unicorn/recommended',
-    'plugin:jest/recommended',
     'prettier',
   ],
   rules: {
@@ -60,6 +52,15 @@ module.exports = {
         // Allow CJS until ESM support improves
         '@typescript-eslint/no-var-requires': 'off',
         'unicorn/prefer-module': 'off',
+      },
+    },
+    {
+      files: ['tests/**/*-test.ts'],
+      extends: ['plugin:qunit/recommended'],
+      rules: {
+        'prefer-arrow-callback': 'off',
+        'func-names': 'off',
+        'qunit/require-expect': 'off',
       },
     },
   ],
