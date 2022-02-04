@@ -6,11 +6,13 @@ import {
   PERK_FACTORY,
   PERK_WITH_VALUE_FACTORY,
 } from './helpers/data-factory';
+import { RenderingTestContext, setupRenderingTest } from './test-setup';
 
-module('render', function () {
-  test('it works', function (assert) {
-    const element = document.createElement('div');
-    const shadow = element.attachShadow({ mode: 'open' });
+module('render', function (hooks) {
+  setupRenderingTest(hooks);
+
+  test('it works', function (this: RenderingTestContext, assert) {
+    const shadow = this.element.attachShadow({ mode: 'open' });
 
     const perks = ['Good', 'Better', 'Best'].map((description) =>
       PERK_FACTORY.create({ description })

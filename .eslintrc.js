@@ -55,7 +55,7 @@ module.exports = {
       },
     },
     {
-      files: ['tests/**/*-test.ts'],
+      files: ['tests/**/*-test.ts', 'tests/test-setup.ts'],
       extends: ['plugin:qunit/recommended'],
       rules: {
         'prefer-arrow-callback': 'off',
