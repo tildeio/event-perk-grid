@@ -31,6 +31,108 @@ module('render', function (hooks) {
 
     render(shadow, data);
 
-    assert.ok(shadow.querySelector('div'));
+    assert.ok(true);
+
+    assert.dom('.epg_grid', shadow).exists();
+    assert.dom('.epg_header', shadow).exists();
   });
 });
+
+/*
+<div role="grid" class="epg_grid">
+  <div role="rowgroup" class="epg_header epg_rowgroup">
+    <div role="row" class="epg_row">
+      <div role="columnheader" class="epg_cell epg_columnheader"></div>
+      <div role="columnheader" class="epg_cell epg_columnheader epg_package">
+        <div class="epg_package-name">Bronze</div>
+        <div class="epg_package-price">$0</div>
+        <div class="epg_package-attributes"></div>
+      </div>
+      <div role="columnheader" class="epg_cell epg_columnheader epg_package">
+        <div class="epg_package-name">Silver</div>
+        <div class="epg_package-price">$0</div>
+        <div class="epg_package-attributes"></div>
+      </div>
+      <div role="columnheader" class="epg_cell epg_columnheader epg_package">
+        <div class="epg_package-name">Gold</div>
+        <div class="epg_package-price">$0</div>
+        <div class="epg_package-attributes"></div>
+      </div>
+    </div>
+  </div>
+  <div role="rowgroup" class="epg_body epg_rowgroup">
+    <div role="row" class="epg_row">
+      <div role="rowheader" class="epg_cell epg_rowheader">
+        <div class="epg_perk-description">Good</div>
+        <div class="epg_perk-attributes"></div>
+      </div>
+      <div
+        role="gridcell"
+        class="epg_cell epg_perk-value epg_perk-value-simple epg_perk-value-truthy"
+      >
+        ✓
+      </div>
+      <div
+        role="gridcell"
+        class="epg_cell epg_perk-value epg_perk-value-simple epg_perk-value-truthy"
+      >
+        ✓
+      </div>
+      <div
+        role="gridcell"
+        class="epg_cell epg_perk-value epg_perk-value-simple epg_perk-value-truthy"
+      >
+        ✓
+      </div>
+    </div>
+    <div role="row" class="epg_row">
+      <div role="rowheader" class="epg_cell epg_rowheader">
+        <div class="epg_perk-description">Better</div>
+        <div class="epg_perk-attributes"></div>
+      </div>
+      <div
+        role="gridcell"
+        class="epg_cell epg_perk-value epg_perk-value-simple epg_perk-value-truthy"
+      >
+        ✓
+      </div>
+      <div
+        role="gridcell"
+        class="epg_cell epg_perk-value epg_perk-value-simple epg_perk-value-truthy"
+      >
+        ✓
+      </div>
+      <div
+        role="gridcell"
+        class="epg_cell epg_perk-value epg_perk-value-simple epg_perk-value-truthy"
+      >
+        ✓
+      </div>
+    </div>
+    <div role="row" class="epg_row">
+      <div role="rowheader" class="epg_cell epg_rowheader">
+        <div class="epg_perk-description">Best</div>
+        <div class="epg_perk-attributes"></div>
+      </div>
+      <div
+        role="gridcell"
+        class="epg_cell epg_perk-value epg_perk-value-simple epg_perk-value-truthy"
+      >
+        ✓
+      </div>
+      <div
+        role="gridcell"
+        class="epg_cell epg_perk-value epg_perk-value-simple epg_perk-value-truthy"
+      >
+        ✓
+      </div>
+      <div
+        role="gridcell"
+        class="epg_cell epg_perk-value epg_perk-value-simple epg_perk-value-truthy"
+      >
+        ✓
+      </div>
+    </div>
+  </div>
+</div>
+*/

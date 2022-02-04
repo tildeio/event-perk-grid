@@ -1,4 +1,5 @@
 import { config } from 'qunit';
+import DOMAssertions from 'qunit-dom/dist/assertions';
 
 export type TestContext = {
   pauseTest(): Promise<void>;
@@ -18,6 +19,13 @@ declare global {
 
   interface QUnit {
     urlParams: { devmode?: boolean };
+  }
+
+  interface Assert {
+    dom(
+      target?: string | Element | null,
+      rootElement?: Element | ShadowRoot
+    ): DOMAssertions;
   }
 }
 
@@ -103,6 +111,9 @@ export function setupRenderingTest(hooks: NestedHooks): void {
     if (QUnit.urlParams.devmode) {
       this.element.classList.add('full-screen');
     }
+
+    // @ts-expect-error QUnit dom types not complete
+    QUnit.assert.dom.rootElement = testContainer;
   });
 
   hooks.afterEach(function (this: RenderingTestContext) {

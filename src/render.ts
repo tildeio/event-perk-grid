@@ -1,10 +1,10 @@
 import { EventData, Package, Perk } from './types/data';
 
-const styles = `
+const styles = (columnCount: number) => `
 .epg_grid {
   display: grid;
   box-sizing: border-box;
-  grid-template-columns: 2fr repeat(3, 1fr);
+  grid-template-columns: 2fr repeat(${columnCount}, 1fr);
 }
 
 .epg_rowgroup,
@@ -48,7 +48,7 @@ export default function render(
 
   if (includeStyles) {
     const style = document.createElement('style');
-    style.textContent = styles;
+    style.textContent = styles(data.packages.length);
     shadow.prepend(style);
   }
 }
