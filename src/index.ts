@@ -19,12 +19,10 @@ export default class PerkGrid extends HTMLElement {
     const fetcher = new Fetcher(eventId);
     const data = await fetcher.fetch();
 
-    render(
-      shadow,
-      data,
-      includeStyles !== undefined && includeStyles !== 'false',
-      gridTitle
-    );
+    render(shadow, data, {
+      includeStyles: includeStyles !== undefined && includeStyles !== 'false',
+      gridTitle,
+    });
   }
 }
 

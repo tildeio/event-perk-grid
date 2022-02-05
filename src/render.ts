@@ -17,11 +17,15 @@ const styles = (columnCount: number) => `
 }
 `;
 
+interface RenderOptions {
+  includeStyles?: boolean;
+  gridTitle?: string | undefined;
+}
+
 export default function render(
   shadow: ShadowRoot,
   data: EventData,
-  includeStyles = false,
-  gridTitle: string | null = null
+  { includeStyles = false, gridTitle = '' }: RenderOptions = {}
 ): void {
   const grid = div('epg_grid', { role: 'grid' });
 
@@ -33,7 +37,7 @@ export default function render(
 
   const title = div('epg_cell epg_columnheader', {
     role: 'columnheader',
-    textContent: gridTitle ?? '',
+    textContent: gridTitle,
   });
   headerRow.append(title);
 
