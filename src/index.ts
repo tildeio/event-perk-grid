@@ -1,4 +1,4 @@
-import Fetcher from './fetcher';
+import fetchData from './fetch-data';
 import render from './render';
 
 export default class PerkGrid extends HTMLElement {
@@ -18,8 +18,7 @@ export default class PerkGrid extends HTMLElement {
       );
     }
 
-    const fetcher = new Fetcher(eventId);
-    const data = await fetcher.fetch();
+    const data = await fetchData(eventId);
 
     render(shadow, data, {
       includeStyles: includeStyles !== undefined && includeStyles !== 'false',
