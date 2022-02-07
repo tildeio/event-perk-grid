@@ -3,9 +3,11 @@ import render from './render';
 
 export default class PerkGrid extends HTMLElement {
   async connectedCallback(): Promise<void> {
+    // FIXME: shadow dom precludes the user from being able to customize the CSS. oops
     const shadow = this.attachShadow({ mode: 'open' });
     const placeholder = document.createElement('div');
-    placeholder.textContent = 'loading...';
+    // FIXME: Allow user to customize
+    placeholder.textContent = 'Loading...';
     shadow.append(placeholder);
 
     const { eventId, includeStyles, gridTitle } = this.dataset;
