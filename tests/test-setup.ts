@@ -1,9 +1,11 @@
 import { config } from 'qunit';
 import DOMAssertions from 'qunit-dom/dist/assertions';
+import { DataFactory } from './helpers/data-factory';
 
 export type TestContext = {
   pauseTest(): Promise<void>;
   resumeTest(): void;
+  factory: DataFactory;
 
   [key: string]: unknown;
 };
@@ -85,6 +87,8 @@ export function setupTest(hooks: NestedHooks): void {
       clearTimeout(QUnit.config.timeout);
       return originalPauseTest.call(this);
     };
+
+    this.factory = new DataFactory();
   });
 
   hooks.afterEach(function (this: TestContext) {

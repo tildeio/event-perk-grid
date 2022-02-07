@@ -5,7 +5,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-  entry: './tests/test-helper.ts',
+  entry: './tests/index.ts',
   module: {
     rules: [
       {
