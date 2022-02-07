@@ -11,14 +11,17 @@
 - `yarn run lint`
 - `yarn run lint:fix`
 
-## Running tests
+## Testing
+
+See test-setup.ts for information about useful test setup hooks.
+
+### Test Server
+
+- `yarn start` - Runs the test suite in "watch mode" using a webpack dev server
+
+### Testem
 
 - `yarn test` – Runs the test suite
-- `yarn test:server` – Runs the test suite in "watch mode" FIXME
-
-## Running the dummy application
-
-FIXME
 
 ## Publishing
 

@@ -1,5 +1,5 @@
 module.exports = {
-  test_page: 'dist/index.html?hidepassed',
+  test_page: 'tmp/tests/index.html?hidepassed',
   before_tests: 'yarn build:testem',
   launch_in_ci: ['Chrome'],
   launch_in_dev: ['Chrome'],
