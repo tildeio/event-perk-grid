@@ -27,6 +27,8 @@ export default function render(
   data: EventData,
   { includeStyles = false, gridTitle = '' }: RenderOptions = {}
 ): void {
+  console.info(process.env['MY_ENV_VAR']);
+
   const grid = div('epg_grid', { role: 'grid' });
 
   const header = div('epg_header epg_rowgroup', { role: 'rowgroup' });

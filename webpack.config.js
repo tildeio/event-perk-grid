@@ -1,5 +1,6 @@
 const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const Dotenv = require('dotenv-webpack');
 
 module.exports = {
   entry: './src/index.ts',
@@ -7,8 +8,9 @@ module.exports = {
     rules: [
       {
         test: /\.ts$/,
-        use: 'ts-loader',
+        include: path.resolve(__dirname, 'src'),
         exclude: /node_modules/,
+        use: 'ts-loader',
       },
     ],
   },
@@ -19,6 +21,9 @@ module.exports = {
     filename: 'index.js',
     path: path.resolve(__dirname, 'dist'),
   },
-  plugins: [new CleanWebpackPlugin()],
-  devtool: 'eval-source-map',
+  plugins: [
+    new CleanWebpackPlugin(),
+    new Dotenv({ path: './.env.production', safe: true, systemvars: true }),
+  ],
+  devtool: 'inline-source-map',
 };

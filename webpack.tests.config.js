@@ -1,8 +1,9 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const path = require('path');
-// eslint-disable-next-line import/no-extraneous-dependencies
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-// eslint-disable-next-line import/no-extraneous-dependencies
+const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+/* eslint-enable import/no-extraneous-dependencies */
 
 module.exports = {
   entry: './tests/index.ts',
@@ -36,7 +37,8 @@ module.exports = {
       inject: 'head',
       scriptLoading: 'blocking',
     }),
+    new Dotenv({ path: './.env.development', safe: true, systemvars: true }),
   ],
-  devtool: 'eval-source-map',
+  devtool: 'source-map',
   devServer: {},
 };

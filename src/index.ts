@@ -1,7 +1,7 @@
 import fetchData from './fetch-data';
 import render from './render';
 
-export default class PerkGrid extends HTMLElement {
+class PerkGrid extends HTMLElement {
   async connectedCallback(): Promise<void> {
     // FIXME: shadow dom precludes the user from being able to customize the CSS. oops
     const shadow = this.attachShadow({ mode: 'open' });

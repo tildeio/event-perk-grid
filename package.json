@@ -2,10 +2,10 @@
   "name": "event-perk-grid",
   "version": "0.0.0",
   "description": "A utility for reading and displaying Event Perk Grids.",
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
-    "dist/src/**/*"
+    "dist/**/*"
   ],
   "repository": {
     "type": "git",
@@ -37,11 +37,13 @@
     "postversion": "git push --tags && yarn publish . --tag $npm_package_version && git push && echo \"Successfully released version $npm_package_version!\""
   },
   "devDependencies": {
+    "@types/dotenv-webpack": "^7.0.3",
     "@types/qunit": "^2.11.3",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
     "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.6.0",
+    "dotenv-webpack": "^7.1.0",
     "eslint": "^8.7.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^16.1.0",
