@@ -22,7 +22,7 @@
     "prebuild": "yarn clean",
     "build:dev": "webpack --mode='development' -c webpack.tests.config.js",
     "build:testem": "TESTEM=true webpack --mode='development' -c webpack.tests.config.js",
-    "build": "tsc",
+    "build": "webpack --mode='production'",
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
     "lint:prettier": "prettier --check .",
