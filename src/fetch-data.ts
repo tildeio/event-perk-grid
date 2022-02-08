@@ -1,6 +1,6 @@
 import { assertIsEventData, EventData } from './types/data';
 
-export default async function fetchData(eventId: string): Promise<EventData> {
+export async function fetchData(eventId: string): Promise<EventData> {
   const response = await fetch(
     `http://localhost:3000/api/v1/perk_grids/${eventId}.json`
   );

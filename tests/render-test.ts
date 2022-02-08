@@ -1,5 +1,5 @@
 import { module, test } from 'qunit';
-import render from '../src/render';
+import { render } from '../src/render';
 import { assertGrid } from './helpers/assert-grid';
 
 import { RenderingTestContext, setupRenderingTest } from './test-setup';

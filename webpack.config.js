@@ -3,7 +3,19 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
 module.exports = {
-  entry: './src/index.ts',
+  experiments: {
+    outputModule: true,
+  },
+  entry: {
+    index: {
+      import: './src/index.ts',
+      library: { type: 'module' },
+    },
+    'custom-element': {
+      import: './src/custom-element.ts',
+      library: { type: 'var', name: 'PerkGrid' },
+    },
+  },
   module: {
     rules: [
       {
@@ -18,7 +30,7 @@ module.exports = {
     extensions: ['.ts', '.js'],
   },
   output: {
-    filename: 'index.js',
+    filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
   },
   plugins: [

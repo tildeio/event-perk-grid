@@ -22,7 +22,7 @@ interface RenderOptions {
   gridTitle?: string | undefined;
 }
 
-export default function render(
+export function render(
   shadow: ShadowRoot,
   data: EventData,
   { includeStyles = false, gridTitle = '' }: RenderOptions = {}

@@ -3,6 +3,10 @@
   "version": "0.0.0",
   "description": "A utility for reading and displaying Event Perk Grids.",
   "main": "dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./custom-element": "./dist/custom-element.js"
+  },
   "types": "dist/index.d.ts",
   "files": [
     "dist/**/*"
