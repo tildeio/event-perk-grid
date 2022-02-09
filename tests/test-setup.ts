@@ -27,10 +27,7 @@ declare global {
   }
 
   interface Assert {
-    dom(
-      target?: string | Element | null,
-      rootElement?: Element | ShadowRoot
-    ): DOMAssertions;
+    dom(target?: string | Element | null, rootElement?: Element): DOMAssertions;
   }
 }
 
@@ -125,9 +122,6 @@ export function setupRenderingTest(hooks: NestedHooks): void {
 
   hooks.afterEach(function (this: RenderingTestContext) {
     this.element.innerHTML = '';
-    if (this.element.shadowRoot) {
-      this.element.shadowRoot.innerHTML = '';
-    }
 
     if (QUnit.urlParams.devmode) {
       this.element.classList.remove('full-screen');

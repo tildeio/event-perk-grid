@@ -2,12 +2,10 @@ import { fetchData, render } from '.';
 
 class PerkGrid extends HTMLElement {
   async connectedCallback(): Promise<void> {
-    // FIXME: shadow dom precludes the user from being able to customize the CSS. oops
-    const shadow = this.attachShadow({ mode: 'open' });
     const placeholder = document.createElement('div');
     // FIXME: Allow user to customize
     placeholder.textContent = 'Loading...';
-    shadow.append(placeholder);
+    this.append(placeholder);
 
     const { eventId, includeStyles, gridTitle } = this.dataset;
 
@@ -19,7 +17,7 @@ class PerkGrid extends HTMLElement {
 
     const data = await fetchData(eventId);
 
-    render(shadow, data, {
+    render(this, data, {
       includeStyles: includeStyles !== undefined && includeStyles !== 'false',
       gridTitle,
     });

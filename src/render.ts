@@ -23,7 +23,7 @@ interface RenderOptions {
 }
 
 export function render(
-  shadow: ShadowRoot,
+  parent: Element | DocumentFragment,
   data: EventData,
   { includeStyles = false, gridTitle = '' }: RenderOptions = {}
 ): void {
@@ -48,12 +48,12 @@ export function render(
 
   body.append(...data.perks.map((perk) => perkRow(perk, data.packages)));
 
-  shadow.replaceChildren(grid);
+  parent.replaceChildren(grid);
 
   if (includeStyles) {
     const style = document.createElement('style');
     style.textContent = styles(data.packages.length);
-    shadow.prepend(style);
+    parent.prepend(style);
   }
 }
 
