@@ -7,12 +7,12 @@ export class PerkGridError extends Error {
 
 class PerkGrid extends HTMLElement {
   async connectedCallback(): Promise<void> {
-    const placeholder = document.createElement('div');
-    // FIXME: Allow user to customize
-    placeholder.textContent = 'Loading...';
-    this.append(placeholder);
+    const { eventId, includeStyles, gridTitle, placeholderText, errorText } =
+      this.dataset;
 
-    const { eventId, includeStyles, gridTitle } = this.dataset;
+    const placeholder = document.createElement('div');
+    placeholder.textContent = placeholderText ?? 'Loading...';
+    this.append(placeholder);
 
     if (!eventId) {
       throw new PerkGridError(
@@ -33,7 +33,7 @@ class PerkGrid extends HTMLElement {
         error instanceof PerkGridTypeError
       ) {
         placeholder.textContent =
-          'There was a problem loading data for the perk grid.';
+          errorText ?? 'There was a problem loading data for the perk grid.';
         console.error(error);
       } else {
         throw error;
