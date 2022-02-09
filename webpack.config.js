@@ -1,4 +1,5 @@
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
 module.exports = (env, { mode }) => ({
@@ -39,6 +40,14 @@ module.exports = (env, { mode }) => ({
       path: `./.env.${mode}`,
       safe: true,
       systemvars: true,
+    }),
+    new CopyWebpackPlugin({
+      // FIXME: This isn't copying to the right place, need to add to pkg.json, etc
+      patterns: [
+        {
+          from: 'src/*.css',
+        },
+      ],
     }),
   ],
   devtool: 'inline-source-map',
