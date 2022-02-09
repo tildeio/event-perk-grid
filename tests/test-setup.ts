@@ -1,6 +1,7 @@
 import { config } from 'qunit';
 import DOMAssertions from 'qunit-dom/dist/assertions';
 import { DataFactory } from './helpers/data-factory';
+import makeServer, { Server } from './helpers/server';
 
 export type TestContext = {
   pauseTest(): Promise<void>;
@@ -13,6 +14,8 @@ export type TestContext = {
 export type RenderingTestContext = TestContext & {
   element: HTMLDivElement;
 };
+
+export type ServerTestContext = { server: Server };
 
 declare global {
   interface Window {
@@ -129,5 +132,20 @@ export function setupRenderingTest(hooks: NestedHooks): void {
     if (QUnit.urlParams.devmode) {
       this.element.classList.remove('full-screen');
     }
+  });
+}
+
+export function setupServer(hooks: NestedHooks): void {
+  hooks.before(async function (this: ServerTestContext) {
+    this.server = makeServer();
+    await this.server.start();
+  });
+
+  hooks.afterEach(function (this: ServerTestContext) {
+    this.server.resetHandlers();
+  });
+
+  hooks.after(function (this: ServerTestContext) {
+    this.server.stop();
   });
 }

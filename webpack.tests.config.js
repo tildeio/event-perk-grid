@@ -1,6 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const path = require('path');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 /* eslint-enable import/no-extraneous-dependencies */
@@ -27,9 +26,9 @@ module.exports = {
   output: {
     filename: 'tests.js',
     path: path.resolve(__dirname, 'tmp', 'tests'),
+    clean: true,
   },
   plugins: [
-    new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       template: process.env.TESTEM
         ? './tests/testem.html'

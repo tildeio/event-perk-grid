@@ -1,5 +1,7 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
+public/mockServiceWorker.js
+
 ################################################################################
 # Everything below this point is the same as .gitignore
 ################################################################################

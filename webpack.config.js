@@ -1,5 +1,4 @@
 const path = require('path');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
 module.exports = (env, { mode }) => ({
@@ -32,9 +31,9 @@ module.exports = (env, { mode }) => ({
   output: {
     filename: '[name].js',
     path: path.resolve(__dirname, 'dist'),
+    clean: true,
   },
   plugins: [
-    new CleanWebpackPlugin(),
     new Dotenv({
       // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       path: `./.env.${mode}`,

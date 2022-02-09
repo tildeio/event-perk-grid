@@ -43,7 +43,6 @@
     "@types/qunit": "^2.11.3",
     "@typescript-eslint/eslint-plugin": "^5.0.0",
     "@typescript-eslint/parser": "^5.0.0",
-    "clean-webpack-plugin": "^4.0.0",
     "css-loader": "^6.6.0",
     "dotenv-webpack": "^7.1.0",
     "eslint": "^8.7.0",
@@ -56,6 +55,7 @@
     "eslint-plugin-qunit": "^7.2.0",
     "eslint-plugin-unicorn": "^40.1.0",
     "html-webpack-plugin": "^5.5.0",
+    "msw": "^0.36.8",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.5.1",
     "qunit": "^2.17.2",
@@ -71,5 +71,8 @@
   "volta": {
     "node": "14.18.3",
     "yarn": "1.22.17"
+  },
+  "msw": {
+    "workerDirectory": "public"
   }
 }

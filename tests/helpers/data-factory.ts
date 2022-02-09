@@ -108,6 +108,8 @@ export class DataFactory {
 
   private eventDataFactory = new EventDataFactory();
 
+  events: Map<string, EventData> = new Map();
+
   makeEventData({
     pkgCount = 3,
     perkCount = 3,
@@ -124,10 +126,12 @@ export class DataFactory {
           .map((p) => this.perkWithValueFactory.create(p)),
       })
     );
-    return this.eventDataFactory.create({
+    const event = this.eventDataFactory.create({
       ...eventAttributes,
       perks,
       packages,
     });
+    this.events.set(event.id, event);
+    return event;
   }
 }
