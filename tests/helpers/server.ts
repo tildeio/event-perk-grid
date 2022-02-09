@@ -1,6 +1,8 @@
 import {
   RequestHandler,
+  ResponseTransformer,
   rest,
+  RestContext,
   setupWorker,
   SetupWorkerApi as Server,
 } from 'msw';
@@ -8,19 +10,39 @@ import { API_ROOT } from '../../src/environment';
 import { EventData } from '../../src/types/data';
 import { inspect } from '../../src/utils/inspect';
 
+export type ExpectGetEventOptions = {
+  responseCallback?: (ctx: RestContext) => ResponseTransformer[];
+};
+
 export function expectGetEvent(
-  expectedEvent: EventData | null
+  assert: Assert,
+  expectedEvent: EventData | null,
+  { responseCallback }: ExpectGetEventOptions = {}
 ): RequestHandler {
   return rest.get(
     'http://localhost:3000/test/api/v1/perk_grids/:eventId.json',
     (req, res, ctx) => {
+      assert.ok(true, '[GET event] Request made');
+
       const { eventId } = req.params;
 
       if (typeof eventId !== 'string') {
         return res.networkError(`Event id ${inspect(eventId)} not valid.`);
       }
 
-      if (expectedEvent?.id === eventId) {
+      const didFindEvent = expectedEvent?.id === eventId;
+
+      if (expectedEvent) {
+        assert.true(didFindEvent, '[GET event] Expected event found');
+      } else {
+        assert.false(didFindEvent, '[GET event] No event found as expected');
+      }
+
+      if (responseCallback) {
+        return res.once(...responseCallback(ctx));
+      }
+
+      if (didFindEvent) {
         return res.once(ctx.status(200), ctx.json(expectedEvent));
       }
 
