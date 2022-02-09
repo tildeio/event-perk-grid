@@ -2,7 +2,7 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 
-module.exports = {
+module.exports = (env, { mode }) => ({
   experiments: {
     outputModule: true,
   },
@@ -35,7 +35,12 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    new Dotenv({ path: './.env.production', safe: true, systemvars: true }),
+    new Dotenv({
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
+      path: `./.env.${mode}`,
+      safe: true,
+      systemvars: true,
+    }),
   ],
   devtool: 'inline-source-map',
-};
+});

@@ -37,7 +37,11 @@ module.exports = {
       inject: 'head',
       scriptLoading: 'blocking',
     }),
-    new Dotenv({ path: './.env.development', safe: true, systemvars: true }),
+    new Dotenv({
+      path: './.env.test',
+      safe: true,
+      systemvars: true,
+    }),
   ],
   devtool: 'source-map',
   devServer: {},

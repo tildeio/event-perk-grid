@@ -23,10 +23,9 @@
   },
   "homepage": "https://github.com/tildeio/event-perk-grid#readme",
   "scripts": {
-    "prebuild": "yarn clean",
-    "build:dev": "webpack --mode='development' -c webpack.tests.config.js",
-    "build:testem": "TESTEM=true webpack --mode='development' -c webpack.tests.config.js",
-    "build": "webpack --mode='production'",
+    "build:test": "webpack --mode development -c webpack.tests.config.js",
+    "build:testem": "TESTEM=true webpack --mode development -c webpack.tests.config.js",
+    "build": "webpack --mode production",
     "lint:js": "eslint .",
     "lint:js:fix": "eslint . --fix",
     "lint:prettier": "prettier --check .",
@@ -35,7 +34,6 @@
     "lint:fix": "npm-run-all --continue-on-error lint:*:fix",
     "start": "webpack serve --open --mode development -c webpack.tests.config.js",
     "test": "testem",
-    "clean": "rm -rf dist",
     "preversion": "yarn lint && yarn build && yarn test",
     "prepare": "yarn build",
     "postversion": "git push --tags && yarn publish . --tag $npm_package_version && git push && echo \"Successfully released version $npm_package_version!\""

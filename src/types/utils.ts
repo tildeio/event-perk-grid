@@ -10,3 +10,11 @@ export function assertType(
     throw new TypeError(message);
   }
 }
+
+export function assertExists<T>(value: T | undefined): T {
+  if (value === undefined) {
+    throw new Error('Expected value to exist');
+  }
+
+  return value;
+}
