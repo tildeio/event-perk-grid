@@ -1,0 +1,14 @@
+.epg_grid {
+  display: grid;
+  box-sizing: border-box;
+  grid-template-columns: 2fr repeat(--epg-column-count, 1fr);
+}
+
+.epg_rowgroup,
+.epg_row {
+  display: contents;
+}
+
+.epg_cell {
+  border: 1px solid black;
+}

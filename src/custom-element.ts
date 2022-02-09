@@ -7,8 +7,7 @@ export class PerkGridError extends Error {
 
 class PerkGrid extends HTMLElement {
   async connectedCallback(): Promise<void> {
-    const { eventId, includeStyles, gridTitle, placeholderText, errorText } =
-      this.dataset;
+    const { eventId, gridTitle, placeholderText, errorText } = this.dataset;
 
     const placeholder = document.createElement('div');
     placeholder.textContent = placeholderText ?? 'Loading...';
@@ -22,11 +21,7 @@ class PerkGrid extends HTMLElement {
 
     try {
       const data = await fetchData(eventId);
-
-      render(this, data, {
-        includeStyles: includeStyles !== undefined && includeStyles !== 'false',
-        gridTitle,
-      });
+      render(this, data, { gridTitle });
     } catch (error: unknown) {
       if (
         error instanceof PerkGridFetchError ||

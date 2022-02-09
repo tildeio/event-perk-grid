@@ -1,33 +1,16 @@
 import { EventData, Package, Perk } from './types/data';
 
-const styles = (columnCount: number) => `
-.epg_grid {
-  display: grid;
-  box-sizing: border-box;
-  grid-template-columns: 2fr repeat(${columnCount}, 1fr);
-}
-
-.epg_rowgroup,
-.epg_row {
-  display: contents;
-}
-
-.epg_cell {
-  border: 1px solid black;
-}
-`;
-
 interface RenderOptions {
-  includeStyles?: boolean;
   gridTitle?: string | undefined;
 }
 
 export function render(
   parent: Element | DocumentFragment,
   data: EventData,
-  { includeStyles = false, gridTitle = '' }: RenderOptions = {}
+  { gridTitle = '' }: RenderOptions = {}
 ): void {
   const grid = div('epg_grid', { role: 'grid' });
+  grid.setAttribute('style', `--epg-column-count: ${data.packages.length}`);
 
   const header = div('epg_header epg_rowgroup', { role: 'rowgroup' });
   grid.append(header);
@@ -49,12 +32,6 @@ export function render(
   body.append(...data.perks.map((perk) => perkRow(perk, data.packages)));
 
   parent.replaceChildren(grid);
-
-  if (includeStyles) {
-    const style = document.createElement('style');
-    style.textContent = styles(data.packages.length);
-    parent.prepend(style);
-  }
 }
 
 type DivOptions = Partial<{
