@@ -1,6 +1,6 @@
 {
   "name": "event-perk-grid",
-  "version": "0.1.1",
+  "version": "0.0.0",
   "description": "A utility for reading and displaying Event Perk Grids.",
   "exports": {
     ".": {
@@ -12,6 +12,9 @@
       "import": "./dist/custom-element.js"
     }
   },
+  "files": [
+    "dist/**/*"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tildeio/event-perk-grid.git"
