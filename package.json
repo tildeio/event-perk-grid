@@ -1,17 +1,16 @@
 {
   "name": "event-perk-grid",
-  "version": "0.1.0",
+  "version": "0.0.0",
   "description": "A utility for reading and displaying Event Perk Grids.",
+  "main": "dist/index.js",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    },
-    "./custom-element": {
-      "types": "./dist/custom-element.d.ts",
-      "import": "./dist/custom-element.js"
-    }
+    ".": "./dist/index.js",
+    "./custom-element": "./dist/custom-element.js"
   },
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/tildeio/event-perk-grid.git"
@@ -35,7 +34,7 @@
     "lint:fix": "npm-run-all --continue-on-error lint:*:fix",
     "start": "webpack serve --open --mode development -c webpack.tests.config.js",
     "test": "testem",
-    "preversion": "yarn lint && yarn build",
+    "preversion": "yarn lint && yarn build && yarn test",
     "prepare": "yarn build",
     "postversion": "git push --tags && yarn publish . --tag $npm_package_version && git push && echo \"Successfully released version $npm_package_version!\""
   },
