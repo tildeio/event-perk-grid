@@ -1,7 +1,8 @@
-import { fetchData, PerkGridFetchError, render } from '.';
+import { fetchData, PerkGridFetchError } from './fetch-data';
+import { render } from './render';
 import { PerkGridTypeError } from './types/utils';
 
-export class PerkGridError extends Error {
+class PerkGridError extends Error {
   override name = 'PerkGridError';
 }
 
@@ -38,3 +39,5 @@ class PerkGrid extends HTMLElement {
 }
 
 customElements.define('perk-grid', PerkGrid);
+
+export {};
