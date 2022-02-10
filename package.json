@@ -77,6 +77,6 @@
     "yarn": "1.22.17"
   },
   "msw": {
-    "workerDirectory": "public"
+    "workerDirectory": "tests"
   }
 }

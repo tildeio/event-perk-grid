@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const path = require('path');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 /* eslint-enable import/no-extraneous-dependencies */
@@ -35,6 +36,13 @@ module.exports = {
         : './tests/index.html',
       inject: 'head',
       scriptLoading: 'blocking',
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: 'tests/mockServiceWorker.js',
+        },
+      ],
     }),
     new Dotenv({
       path: './.env.test',

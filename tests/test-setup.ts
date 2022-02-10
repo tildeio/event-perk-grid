@@ -131,8 +131,7 @@ export function setupRenderingTest(hooks: NestedHooks): void {
 
 export function setupServer(hooks: NestedHooks): void {
   hooks.before(async function (this: ServerTestContext) {
-    this.server = makeServer();
-    await this.server.start();
+    this.server = await makeServer();
   });
 
   hooks.afterEach(function (this: ServerTestContext) {
