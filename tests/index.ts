@@ -7,5 +7,6 @@ import { configureQUnit } from './test-setup';
 
 import './render-test';
 import './fetch-data-test';
+import './custom-element-test';
 
 configureQUnit();

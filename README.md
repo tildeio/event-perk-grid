@@ -12,6 +12,11 @@ yarn add --dev event-perk-grid
 
 FIXME
 
+TODOS:
+
+- [ ] custom-element tests
+- [ ] documentation
+
 ## Contributing
 
 See the [Contributing](CONTRIBUTING.md) guide for details.

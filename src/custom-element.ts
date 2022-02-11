@@ -2,6 +2,13 @@ import { fetchData, PerkGridFetchError } from './fetch-data';
 import { render } from './render';
 import { PerkGridTypeError } from './types/utils';
 
+export type PerkGridDataSet = Partial<{
+  eventId: string;
+  gridTitle: string;
+  placeholderText: string;
+  errorText: string;
+}>;
+
 class PerkGridError extends Error {
   override name = 'PerkGridError';
 }
@@ -35,6 +42,8 @@ class PerkGrid extends HTMLElement {
         throw error;
       }
     }
+
+    this.dispatchEvent(new CustomEvent('ready'));
   }
 }
 
