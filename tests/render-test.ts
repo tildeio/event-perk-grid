@@ -1,4 +1,4 @@
-import { module, test, todo } from 'qunit';
+import { module, test } from 'qunit';
 import { render } from '../src/render';
 import { assertGrid } from './helpers/assert-grid';
 import { RenderingTestContext, setupRenderingTest } from './test-setup';
@@ -21,16 +21,28 @@ module('render', function (hooks) {
     assert.dom('.epg_grid').doesNotHaveStyle({ display: 'grid' });
   });
 
-  todo('can include styles', function (this: RenderingTestContext, assert) {
-    // const data = this.factory.makeEventData({ pkgCount: 1, perkCount: 1 });
+  test('can be styled by the user', function (this: RenderingTestContext, assert) {
+    const data = this.factory.makeEventData({ pkgCount: 1, perkCount: 1 });
 
-    // render(this.element, data, { includeStyles: true });
+    render(this.element, data);
 
     assertGrid(assert, [
       ['', 'Package 1$1,000'],
       ['Perk 1', '✓'],
     ]);
-    assert.dom('style').exists();
+
+    assert
+      .dom('.epg_grid')
+      .doesNotHaveStyle(
+        { display: 'grid' },
+        'setup: grid element not already styled'
+      );
+
+    const style = document.createElement('style');
+    style.innerHTML = `.epg_grid { display: grid }`;
+    this.element.prepend(style);
+    assert.dom('style').exists('setup: style element added');
+
     assert.dom('.epg_grid').hasStyle({ display: 'grid' });
   });
 

@@ -1,6 +1,7 @@
 const path = require('path');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 
 module.exports = (env, { mode }) => ({
   experiments: {
@@ -24,6 +25,10 @@ module.exports = (env, { mode }) => ({
         exclude: /node_modules/,
         use: 'ts-loader',
       },
+      {
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, 'css-loader'],
+      },
     ],
   },
   resolve: {
@@ -41,14 +46,10 @@ module.exports = (env, { mode }) => ({
       safe: true,
       systemvars: true,
     }),
-    new CopyWebpackPlugin({
-      // FIXME: This isn't copying to the right place, need to add to pkg.json, etc
-      patterns: [
-        {
-          from: 'src/*.css',
-        },
-      ],
-    }),
+    new MiniCssExtractPlugin(),
   ],
+  optimization: {
+    minimizer: [`...`, new CssMinimizerPlugin()],
+  },
   devtool: 'inline-source-map',
 });

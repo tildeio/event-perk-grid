@@ -1,7 +1,7 @@
 .epg_grid {
   display: grid;
   box-sizing: border-box;
-  grid-template-columns: 2fr repeat(--epg-column-count, 1fr);
+  grid-template-columns: 2fr repeat(var(--epg-column-count), 1fr);
 }
 
 .epg_rowgroup,

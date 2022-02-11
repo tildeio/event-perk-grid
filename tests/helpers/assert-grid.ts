@@ -2,7 +2,19 @@ export function assertGrid(
   assert: Assert,
   [header, ...rows]: [header: string[], ...rows: string[][]]
 ): void {
-  assert.dom('.epg_grid').exists().hasAttribute('role', 'grid');
+  const gridEl = document.querySelector('div.epg_grid');
+
+  if (!gridEl || !(gridEl instanceof HTMLDivElement)) {
+    throw new Error('grid div not found');
+  }
+
+  assert.strictEqual(
+    gridEl.style.getPropertyValue('--epg-column-count').trim(),
+    (header.length - 1).toString(),
+    'the column count CSS variable was properly set'
+  );
+
+  assert.dom(gridEl).exists().hasAttribute('role', 'grid');
 
   assert.dom('.epg_header').exists().hasAttribute('role', 'rowgroup');
   assert.dom('.epg_header .epg_row').exists().hasAttribute('role', 'row');
