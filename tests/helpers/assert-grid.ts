@@ -2,6 +2,9 @@ export function assertGrid(
   assert: Assert,
   [header, ...rows]: [header: string[], ...rows: string[][]]
 ): void {
+  assert.dom('.epg_loading').doesNotExist();
+  assert.dom('.epg_error').doesNotExist();
+
   const gridEl = document.querySelector('div.epg_grid');
 
   if (!gridEl || !(gridEl instanceof HTMLDivElement)) {

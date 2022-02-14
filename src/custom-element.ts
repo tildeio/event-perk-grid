@@ -42,8 +42,11 @@ class PerkGrid extends HTMLElement {
         error instanceof PerkGridFetchError ||
         error instanceof PerkGridTypeError
       ) {
-        placeholder.textContent =
-          errorText ?? 'There was a problem loading data for the perk grid.';
+        const errorMessage = div('epg_error', {
+          textContent:
+            errorText ?? 'There was a problem loading data for the perk grid.',
+        });
+        this.replaceChildren(errorMessage);
         console.error(error);
       } else {
         throw error;

@@ -42,6 +42,17 @@ async function renderCustomElement(
   });
 }
 
+function renderCustomStyleElement(context: Context, assert: Assert): void {
+  const style = document.createElement('style');
+  style.innerHTML = `
+    .epg_grid { display: grid; }
+    .epg_loading { font-size: 24px; }
+    .epg_error { font-size: 42px; }
+  `;
+  context.element.prepend(style);
+  assert.dom('style').exists('setup: style element added');
+}
+
 module('custom element', function (hooks) {
   setupRenderingTest(hooks);
   setupServer(hooks);
@@ -83,9 +94,24 @@ module('custom element', function (hooks) {
     assert.strictEqual(loadingCount, 1);
   });
 
+  test('handles a 404 (PerkGridFetchError)', async function (this: Context, assert) {
+    this.server.use(expectGetEvent(assert, null));
+
+    await renderCustomElement(this, { dataSet: { eventId: 'not-found' } });
+
+    assert.dom('.epg_grid').doesNotExist();
+    assert.dom('.epg_loading').doesNotExist();
+
+    assert
+      .dom('.epg_error')
+      .containsText('There was a problem loading data for the perk grid.');
+  });
+
   test('can be styled by the user', async function (this: Context, assert) {
     const mockEvent = this.factory.makeEventData({ pkgCount: 1, perkCount: 1 });
     this.server.use(expectGetEvent(assert, mockEvent));
+
+    renderCustomStyleElement(this, assert);
 
     let loadingCount = 0;
 
@@ -94,10 +120,17 @@ module('custom element', function (hooks) {
         eventId: mockEvent.id,
         gridTitle: 'Sponsorship Packages',
         placeholderText: 'Gathering data...',
+        errorText: 'Uh oh.',
       },
       loadingCallback() {
         loadingCount += 1;
         assert.dom('.epg_loading').hasText('Gathering data...');
+        assert
+          .dom('.epg_loading')
+          .hasStyle(
+            { 'font-size': '24px' },
+            'the placeholder style applied properly'
+          );
       },
     });
 
@@ -106,22 +139,31 @@ module('custom element', function (hooks) {
       ['Perk 1', '✓'],
     ]);
 
-    assert
-      .dom('.epg_grid')
-      .doesNotHaveStyle(
-        { display: 'grid' },
-        'setup: grid element not already styled'
-      );
-
-    const style = document.createElement('style');
-    style.innerHTML = `.epg_grid { display: grid }`;
-    this.element.prepend(style);
-    assert.dom('style').exists('setup: style element added');
-
     // This would fail if we used shadow dom
     assert
       .dom('.epg_grid')
       .hasStyle({ display: 'grid' }, 'the style applied properly');
     assert.strictEqual(loadingCount, 1);
+  });
+
+  test('can display a customizable error message', async function (this: Context, assert) {
+    this.server.use(expectGetEvent(assert, null));
+
+    renderCustomStyleElement(this, assert);
+
+    await renderCustomElement(this, {
+      dataSet: { eventId: 'not-found', errorText: 'Uh oh.' },
+    });
+
+    assert.dom('.epg_grid').doesNotExist();
+    assert.dom('.epg_loading').doesNotExist();
+
+    assert
+      .dom('.epg_error')
+      .containsText('Uh oh.')
+      .hasStyle(
+        { 'font-size': '42px' },
+        'the placeholder style applied properly'
+      );
   });
 });
