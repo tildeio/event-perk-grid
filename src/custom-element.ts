@@ -1,6 +1,7 @@
 import { fetchData, PerkGridFetchError } from './fetch-data';
 import { render } from './render';
 import { PerkGridTypeError } from './types/utils';
+import { div } from './utils/rendering';
 
 export type PerkGridDataSet = Partial<{
   eventId: string;
@@ -15,10 +16,14 @@ class PerkGridError extends Error {
 
 class PerkGrid extends HTMLElement {
   async connectedCallback(): Promise<void> {
-    const { eventId, gridTitle, placeholderText, errorText } = this.dataset;
+    this.dispatchEvent(new CustomEvent('connected'));
 
-    const placeholder = document.createElement('div');
-    placeholder.textContent = placeholderText ?? 'Loading...';
+    const { eventId, gridTitle, placeholderText, errorText } = this
+      .dataset as PerkGridDataSet;
+
+    const placeholder = div('epg_loading', {
+      textContent: placeholderText ?? 'Loading...',
+    });
     this.append(placeholder);
 
     if (!eventId) {
@@ -26,6 +31,8 @@ class PerkGrid extends HTMLElement {
         'Cannot render perk-grid. You must include the data-event-id attribute with your event id.'
       );
     }
+
+    this.dispatchEvent(new CustomEvent('loading'));
 
     try {
       const data = await fetchData(eventId);

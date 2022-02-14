@@ -1,5 +1,6 @@
 import { module, test } from 'qunit';
 import '../src/custom-element';
+import type { PerkGridDataSet } from '../src/custom-element';
 import { assertGrid } from './helpers/assert-grid';
 import { expectGetEvent } from './helpers/server';
 import {
@@ -12,20 +13,29 @@ import {
 type Context = RenderingTestContext & ServerTestContext;
 
 type RenderOptions = {
-  eventId: string | null;
+  dataSet?: PerkGridDataSet;
+  loadingCallback?: () => void;
 };
 
 async function renderCustomElement(
   context: Context,
-  options?: RenderOptions
+  { dataSet, loadingCallback }: RenderOptions = {}
 ): Promise<Event> {
   return new Promise((resolve) => {
-    const { eventId } = { eventId: null, ...options };
     const perkGrid = document.createElement('perk-grid');
+    if (loadingCallback) {
+      perkGrid.addEventListener('loading', loadingCallback);
+    }
     perkGrid.addEventListener('ready', resolve);
 
-    if (eventId) {
-      perkGrid.dataset['eventId'] = eventId;
+    if (dataSet) {
+      Object.entries(dataSet).forEach(([key, value]) => {
+        perkGrid.dataset[key] = value;
+      });
+    }
+
+    if (dataSet?.eventId) {
+      perkGrid.dataset['eventId'] = dataSet.eventId;
     }
 
     context.element.append(perkGrid);
@@ -40,7 +50,7 @@ module('custom element', function (hooks) {
     const mockEvent = this.factory.makeEventData();
     this.server.use(expectGetEvent(assert, mockEvent));
 
-    await renderCustomElement(this, { eventId: mockEvent.id });
+    await renderCustomElement(this, { dataSet: { eventId: mockEvent.id } });
 
     assertGrid(assert, [
       ['', 'Package 1$1,000', 'Package 2$2,000', 'Package 3$3,000'],
@@ -52,48 +62,66 @@ module('custom element', function (hooks) {
     assert.dom('.epg_grid').doesNotHaveStyle({ display: 'grid' });
   });
 
-  // skip('can be styled by the user', function (this: Context, assert) {
-  //   const mockEvent = this.factory.makeEventData({ pkgCount: 1, perkCount: 1 });
+  test('has a placeholder', async function (this: Context, assert) {
+    const mockEvent = this.factory.makeEventData({ pkgCount: 1, perkCount: 1 });
+    this.server.use(expectGetEvent(assert, mockEvent));
 
-  //   this.server.use(expectGetEvent(assert, mockEvent));
+    let loadingCount = 0;
 
-  //   await renderCustomElement(this, { eventId: mockEvent.id });
+    await renderCustomElement(this, {
+      dataSet: { eventId: mockEvent.id },
+      loadingCallback() {
+        loadingCount += 1;
+        assert.dom('.epg_loading').hasText('Loading...');
+      },
+    });
 
-  //   assertGrid(assert, [
-  //     ['', 'Package 1$1,000'],
-  //     ['Perk 1', '✓'],
-  //   ]);
+    assertGrid(assert, [
+      ['', 'Package 1$1,000'],
+      ['Perk 1', '✓'],
+    ]);
+    assert.strictEqual(loadingCount, 1);
+  });
 
-  //   assert
-  //     .dom('.epg_grid')
-  //     .doesNotHaveStyle(
-  //       { display: 'grid' },
-  //       'setup: grid element not already styled'
-  //     );
+  test('can be styled by the user', async function (this: Context, assert) {
+    const mockEvent = this.factory.makeEventData({ pkgCount: 1, perkCount: 1 });
+    this.server.use(expectGetEvent(assert, mockEvent));
 
-  //   const style = document.createElement('style');
-  //   style.innerHTML = `.epg_grid { display: grid }`;
-  //   this.element.prepend(style);
-  //   assert.dom('style').exists('setup: style element added');
+    let loadingCount = 0;
 
-  //   assert.dom('.epg_grid').hasStyle({ display: 'grid' });
-  // });
+    await renderCustomElement(this, {
+      dataSet: {
+        eventId: mockEvent.id,
+        gridTitle: 'Sponsorship Packages',
+        placeholderText: 'Gathering data...',
+      },
+      loadingCallback() {
+        loadingCount += 1;
+        assert.dom('.epg_loading').hasText('Gathering data...');
+      },
+    });
 
-  // skip('replaces any existing children', function (this: Context, assert) {
-  //   const placeholder = document.createElement('div');
-  //   placeholder.setAttribute('id', 'replace-me');
-  //   this.element.append(placeholder);
+    assertGrid(assert, [
+      ['Sponsorship Packages', 'Package 1$1,000'],
+      ['Perk 1', '✓'],
+    ]);
 
-  //   assert.dom('#replace-me').exists('There is an element to replace');
+    assert
+      .dom('.epg_grid')
+      .doesNotHaveStyle(
+        { display: 'grid' },
+        'setup: grid element not already styled'
+      );
 
-  //   const data = this.factory.makeEventData({ pkgCount: 1, perkCount: 1 });
+    const style = document.createElement('style');
+    style.innerHTML = `.epg_grid { display: grid }`;
+    this.element.prepend(style);
+    assert.dom('style').exists('setup: style element added');
 
-  //   render(this.element, data);
-
-  //   assertGrid(assert, [
-  //     ['', 'Package 1$1,000'],
-  //     ['Perk 1', '✓'],
-  //   ]);
-  //   assert.dom('#replace-me').doesNotExist('The element was replaced');
-  // });
+    // This would fail if we used shadow dom
+    assert
+      .dom('.epg_grid')
+      .hasStyle({ display: 'grid' }, 'the style applied properly');
+    assert.strictEqual(loadingCount, 1);
+  });
 });

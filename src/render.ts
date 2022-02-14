@@ -1,4 +1,5 @@
 import { EventData, Package, Perk } from './types/data';
+import { div } from './utils/rendering';
 
 interface RenderOptions {
   gridTitle?: string | undefined;
@@ -32,29 +33,6 @@ export function render(
   body.append(...data.perks.map((perk) => perkRow(perk, data.packages)));
 
   parent.replaceChildren(grid);
-}
-
-type DivOptions = Partial<{
-  role: string;
-  textContent: string;
-}>;
-
-function div(
-  className: string,
-  { role, textContent }: DivOptions = {}
-): HTMLDivElement {
-  const element = document.createElement('div');
-
-  if (role) {
-    element.setAttribute('role', role);
-  }
-  element.setAttribute('class', className);
-
-  if (textContent) {
-    element.textContent = textContent;
-  }
-
-  return element;
 }
 
 function packageHeader(pkg: Package): HTMLDivElement {
