@@ -10,11 +10,11 @@ export type PerkGridDataSet = Partial<{
   errorText: string;
 }>;
 
-class PerkGridError extends Error {
+export class PerkGridError extends Error {
   override name = 'PerkGridError';
 }
 
-class PerkGrid extends HTMLElement {
+export class PerkGrid extends HTMLElement {
   async connectedCallback(): Promise<void> {
     this.dispatchEvent(new CustomEvent('connected'));
 
@@ -38,6 +38,8 @@ class PerkGrid extends HTMLElement {
       const data = await fetchData(eventId);
       render(this, data, { gridTitle });
     } catch (error: unknown) {
+      this.dispatchEvent(new CustomEvent('error', { detail: error }));
+
       if (
         error instanceof PerkGridFetchError ||
         error instanceof PerkGridTypeError

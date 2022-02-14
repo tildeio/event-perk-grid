@@ -1,6 +1,11 @@
 import { module, test } from 'qunit';
 import '../src/custom-element';
-import type { PerkGridDataSet } from '../src/custom-element';
+import type {
+  PerkGrid,
+  PerkGridDataSet,
+  PerkGridError,
+} from '../src/custom-element';
+import { assertExists } from '../src/types/utils';
 import { assertGrid } from './helpers/assert-grid';
 import { expectGetEvent } from './helpers/server';
 import {
@@ -165,5 +170,25 @@ module('custom element', function (hooks) {
         { 'font-size': '42px' },
         'the placeholder style applied properly'
       );
+  });
+
+  test('throws if no event id is provided', async function (this: Context, assert) {
+    const PerkGridConstructor = assertExists(customElements.get('perk-grid'));
+    const perkGrid = new PerkGridConstructor() as PerkGrid;
+
+    await assert.rejects(
+      perkGrid.connectedCallback(),
+      function (error: PerkGridError) {
+        assert.strictEqual(
+          error.message,
+          'Cannot render perk-grid. You must include the data-event-id attribute with your event id.'
+        );
+        return true;
+      }
+    );
+
+    assert.dom('.epg_grid').doesNotExist();
+    assert.dom('.epg_loading').doesNotExist();
+    assert.dom('.epg_error').doesNotExist();
   });
 });
