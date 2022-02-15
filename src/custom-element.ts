@@ -16,7 +16,7 @@ export class PerkGridError extends Error {
 
 export class PerkGrid extends HTMLElement {
   async connectedCallback(): Promise<void> {
-    this.dispatchEvent(new CustomEvent('connected'));
+    this.dispatchEvent(new CustomEvent('connecting'));
 
     const { eventId, gridTitle, placeholderText, errorText } = this
       .dataset as PerkGridDataSet;
@@ -49,6 +49,8 @@ export class PerkGrid extends HTMLElement {
             errorText ?? 'There was a problem loading data for the perk grid.',
         });
         this.replaceChildren(errorMessage);
+
+        // eslint-disable-next-line no-console
         console.error(error);
       } else {
         throw error;
@@ -56,6 +58,10 @@ export class PerkGrid extends HTMLElement {
     }
 
     this.dispatchEvent(new CustomEvent('ready'));
+  }
+
+  disconnectedCallback(): void {
+    this.dispatchEvent(new CustomEvent('disconnected'));
   }
 }
 

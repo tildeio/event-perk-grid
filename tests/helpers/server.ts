@@ -88,6 +88,7 @@ export default async function makeServer(): Promise<Server> {
         return server;
       }
     } catch (error: unknown) {
+      // eslint-disable-next-line no-console
       console.error(error);
     }
   }

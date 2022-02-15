@@ -5,6 +5,7 @@ import type {
   PerkGridDataSet,
   PerkGridError,
 } from '../src/custom-element';
+import { PerkGridFetchError } from '../src/fetch-data';
 import { assertExists } from '../src/types/utils';
 import { assertGrid } from './helpers/assert-grid';
 import { expectGetEvent } from './helpers/server';
@@ -19,18 +20,37 @@ type Context = RenderingTestContext & ServerTestContext;
 
 type RenderOptions = {
   dataSet?: PerkGridDataSet;
-  loadingCallback?: () => void;
+  loadingCallback?: (event: CustomEvent) => void;
+  errorCallback?: (event: CustomEvent) => void;
 };
+
+function assertCustomEvent(event: Event): asserts event is CustomEvent {
+  if (!(event instanceof CustomEvent)) {
+    throw new TypeError('Expected error event to be a CustomEvent');
+  }
+}
 
 async function renderCustomElement(
   context: Context,
-  { dataSet, loadingCallback }: RenderOptions = {}
+  { dataSet, loadingCallback, errorCallback }: RenderOptions = {}
 ): Promise<Event> {
   return new Promise((resolve) => {
     const perkGrid = document.createElement('perk-grid');
+
     if (loadingCallback) {
-      perkGrid.addEventListener('loading', loadingCallback);
+      perkGrid.addEventListener('loading', (event) => {
+        assertCustomEvent(event);
+        loadingCallback(event);
+      });
     }
+
+    if (errorCallback) {
+      perkGrid.addEventListener('error', (event) => {
+        assertCustomEvent(event);
+        errorCallback(event);
+      });
+    }
+
     perkGrid.addEventListener('ready', resolve);
 
     if (dataSet) {
@@ -102,7 +122,21 @@ module('custom element', function (hooks) {
   test('handles a 404 (PerkGridFetchError)', async function (this: Context, assert) {
     this.server.use(expectGetEvent(assert, null));
 
-    await renderCustomElement(this, { dataSet: { eventId: 'not-found' } });
+    let errorCount = 0;
+
+    await renderCustomElement(this, {
+      dataSet: { eventId: 'not-found' },
+      errorCallback({ detail }) {
+        assert.strictEqual(
+          detail instanceof PerkGridFetchError
+            ? detail.message
+            : 'Error was not a PerkGridFetchError',
+          'Problem fetching data for event id "not-found", error={"status":404,"error":"Not found"}'
+        );
+
+        errorCount += 1;
+      },
+    });
 
     assert.dom('.epg_grid').doesNotExist();
     assert.dom('.epg_loading').doesNotExist();
@@ -110,6 +144,7 @@ module('custom element', function (hooks) {
     assert
       .dom('.epg_error')
       .containsText('There was a problem loading data for the perk grid.');
+    assert.strictEqual(errorCount, 1);
   });
 
   test('can be styled by the user', async function (this: Context, assert) {
@@ -156,8 +191,20 @@ module('custom element', function (hooks) {
 
     renderCustomStyleElement(this, assert);
 
+    let errorCount = 0;
+
     await renderCustomElement(this, {
       dataSet: { eventId: 'not-found', errorText: 'Uh oh.' },
+      errorCallback({ detail }) {
+        assert.strictEqual(
+          detail instanceof PerkGridFetchError
+            ? detail.message
+            : 'Error was not a PerkGridFetchError',
+          'Problem fetching data for event id "not-found", error={"status":404,"error":"Not found"}'
+        );
+
+        errorCount += 1;
+      },
     });
 
     assert.dom('.epg_grid').doesNotExist();
@@ -170,6 +217,7 @@ module('custom element', function (hooks) {
         { 'font-size': '42px' },
         'the placeholder style applied properly'
       );
+    assert.strictEqual(errorCount, 1);
   });
 
   test('throws if no event id is provided', async function (this: Context, assert) {
@@ -190,5 +238,26 @@ module('custom element', function (hooks) {
     assert.dom('.epg_grid').doesNotExist();
     assert.dom('.epg_loading').doesNotExist();
     assert.dom('.epg_error').doesNotExist();
+  });
+
+  test('dispatches events', async function (this: Context, assert) {
+    const mockEvent = this.factory.makeEventData();
+    this.server.use(expectGetEvent(assert, mockEvent));
+
+    const PerkGridConstructor = assertExists(customElements.get('perk-grid'));
+    const perkGrid = new PerkGridConstructor() as PerkGrid;
+
+    const events = ['connecting', 'loading', 'ready', 'disconnected'];
+
+    events.forEach((step) =>
+      perkGrid.addEventListener(step, () => assert.step(step))
+    );
+
+    perkGrid.dataset['eventId'] = mockEvent.id;
+
+    await perkGrid.connectedCallback();
+    perkGrid.disconnectedCallback();
+
+    assert.verifySteps(events, 'Events were dispatched in the expected order');
   });
 });

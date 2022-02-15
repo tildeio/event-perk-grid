@@ -67,7 +67,8 @@ export function setupTest(hooks: NestedHooks): void {
     };
 
     this.pauseTest = function globalPauseTest() {
-      console.info('Testing paused. Use `resumeTest()` to continue.'); // eslint-disable-line no-console
+      // eslint-disable-next-line no-console
+      console.info('Testing paused. Use `resumeTest()` to continue.');
 
       return new Promise((resolve) => {
         resume = resolve;
