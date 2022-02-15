@@ -14,7 +14,6 @@ FIXME
 
 TODOS:
 
-- [ ] custom-element tests
 - [ ] documentation
 
 ## Contributing
