@@ -1,0 +1,13 @@
+{{#if this.errorMessage}}
+  <p>
+    {{this.errorMessage}}
+  </p>
+{{else if this.data}}
+  <div class="perk-grid-with-modifiers" {{this.renderPerkGrid}}></div>
+{{else}}
+  <div
+    class="spinner"
+    aria-label="Loading sponsorship packages"
+    {{this.startDataFetch}}
+  ></div>
+{{/if}}

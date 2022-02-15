@@ -3,6 +3,8 @@
 # compiled output
 /dist/
 /tmp/
+/docs/dist/
+/docs/tmp/
 
 # Logs
 logs
@@ -12,7 +14,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # Dependency directories
-node_modules/
+/node_modules/
+/docs/node_modules/
 
 # TypeScript cache
 *.tsbuildinfo
@@ -28,4 +31,7 @@ node_modules/
 
 # dotenv environment variable files
 .env
+.env.development.local
+.env.test.local
 .env.production
+.env.local

@@ -1,5 +1,12 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
+**/*.hbs
+
+################################################################################
+# Everything below this point is the same as .eslintignore
+################################################################################
+
+# Generated files
 tests/mockServiceWorker.js
 
 ################################################################################
@@ -9,6 +16,8 @@ tests/mockServiceWorker.js
 # compiled output
 /dist/
 /tmp/
+/docs/dist/
+/docs/tmp/
 
 # Logs
 logs
@@ -18,7 +27,8 @@ yarn-debug.log*
 yarn-error.log*
 
 # Dependency directories
-node_modules/
+/node_modules/
+/docs/node_modules/
 
 # TypeScript cache
 *.tsbuildinfo
@@ -36,5 +46,5 @@ node_modules/
 .env
 .env.development.local
 .env.test.local
-.env.production.local
+.env.production
 .env.local

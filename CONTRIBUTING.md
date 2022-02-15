@@ -31,5 +31,6 @@ git push
 yarn login
 yarn publish
 # now check to make sure the published package works
+git push
 git push --tags
 ```
