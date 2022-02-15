@@ -26,7 +26,10 @@ See test-setup.ts for information about useful test setup hooks.
 ## Publishing
 
 ```shell
+git commit
+git push
 yarn login
-yarn version
 yarn publish
+# now check to make sure the published package works
+git push --tags
 ```

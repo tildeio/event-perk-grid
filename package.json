@@ -36,8 +36,7 @@
     "start": "webpack serve --open --mode development -c webpack.tests.config.js",
     "test": "testem",
     "preversion": "yarn lint && yarn build && yarn test",
-    "prepare": "yarn build",
-    "postversion": "git push --tags && yarn publish . --tag $npm_package_version && git push && echo \"Successfully released version $npm_package_version!\""
+    "prepare": "yarn build"
   },
   "devDependencies": {
     "@types/dotenv-webpack": "^7.0.3",

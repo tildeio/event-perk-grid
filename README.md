@@ -15,6 +15,9 @@ FIXME
 TODOS:
 
 - [ ] documentation
+- [ ] move price to bottom row
+- [ ] accessibility
+- [ ] responsiveness: list with package top level and sub-list of perks for each package
 
 ## Contributing
 
