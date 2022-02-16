@@ -1,0 +1,4 @@
+{
+  "entryPoints": ["src/index.ts", "src/custom-element.ts"],
+  "out": "docs/public/api"
+}

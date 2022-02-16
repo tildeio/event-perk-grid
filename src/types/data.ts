@@ -1,7 +1,10 @@
 import { inspect } from '../utils/inspect';
 import { assertType, isRecord } from './utils';
 
-const PERK_TYPES = [
+/**
+ * Perk types
+ */
+export const PERK_TYPES = [
   'simple' as const,
   'quantity' as const,
   'freeform' as const,

@@ -1,10 +1,18 @@
 import { EventData, Package, Perk } from './types/data';
 import { div } from './utils/rendering';
 
-interface RenderOptions {
+export interface RenderOptions {
+  /**
+   * If provided, the text-content of the top-left corner of the perk grid will
+   * be set to this text.
+   */
   gridTitle?: string | undefined;
 }
 
+/**
+ * Replaces the contents of the given parent element with a grid of event
+ * sponsorship packages and perks.
+ */
 export function render(
   parent: Element | DocumentFragment,
   data: EventData,
