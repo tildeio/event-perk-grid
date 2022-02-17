@@ -18,6 +18,8 @@ tests/mockServiceWorker.js
 /tmp/
 /docs/dist/
 /docs/tmp/
+/docs/public/api/
+/deploy-docs/
 
 # Logs
 logs

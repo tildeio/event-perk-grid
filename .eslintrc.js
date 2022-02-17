@@ -22,6 +22,7 @@ module.exports = {
     'class-methods-use-this': 'off',
     'eslint-comments/no-unused-disable': 'error',
     'import/prefer-default-export': 'off',
+    'import/no-extraneous-dependencies': 'off',
     'max-classes-per-file': 'off',
     // Too restrictive, writing ugly code to defend against a very unlikely scenario: https://eslint.org/docs/rules/no-prototype-builtins
     'no-prototype-builtins': 'off',
@@ -31,9 +32,11 @@ module.exports = {
       'error',
       { functions: false, classes: true, variables: true },
     ],
+
     // Allow most functions to rely on type inference. If the function is exported, then `@typescript-eslint/explicit-module-boundary-types` will ensure it's typed.
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'error',
+    '@typescript-eslint/no-empty-interface': 'off',
     '@typescript-eslint/no-use-before-define': [
       'error',
       { functions: false, classes: true, variables: true, typedefs: true },
@@ -61,6 +64,12 @@ module.exports = {
         'prefer-arrow-callback': 'off',
         'func-names': 'off',
         'qunit/require-expect': 'off',
+      },
+    },
+    {
+      files: ['src'],
+      rules: {
+        'import/no-extraneous-dependencies': 'error',
       },
     },
   ],

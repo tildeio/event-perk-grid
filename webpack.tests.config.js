@@ -1,9 +1,7 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const path = require('path');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-/* eslint-enable import/no-extraneous-dependencies */
 
 module.exports = {
   entry: './tests/index.ts',
