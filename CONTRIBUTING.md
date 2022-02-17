@@ -34,3 +34,9 @@ yarn publish
 git push
 git push --tags
 ```
+
+## Deploying docs
+
+```shell
+yarn docs:deploy
+```

@@ -37,7 +37,8 @@
     "test": "testem",
     "preversion": "yarn lint && yarn build && yarn test && yarn docs",
     "prepare": "yarn build",
-    "docs": "typedoc"
+    "docs": "typedoc",
+    "docs:deploy": "yarn docs && cd docs && yarn ember deploy production"
   },
   "devDependencies": {
     "@types/dotenv-webpack": "^7.0.3",

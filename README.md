@@ -2,6 +2,8 @@
 
 A utility for reading and displaying Event Perk Grids.
 
+[DOCUMENTATION AND EXAMPLES](https://tildeio.github.io/event-perk-grid/)
+
 ## Installation
 
 ```shell

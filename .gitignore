@@ -5,6 +5,7 @@
 /tmp/
 /docs/dist/
 /docs/tmp/
+/deploy-docs/
 
 # Logs
 logs

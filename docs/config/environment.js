@@ -46,7 +46,7 @@ module.exports = function (environment) {
   }
 
   if (environment === 'production') {
-    ENV.rootURL = '/event-perk-grid';
+    ENV.rootURL = '/event-perk-grid/';
     ENV.locationType = 'hash';
   }
 
