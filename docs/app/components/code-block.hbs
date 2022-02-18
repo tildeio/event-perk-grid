@@ -1,0 +1,15 @@
+<div class="code-block">
+  {{#if @filename}}
+    <div class="code-block-header">
+      {{@filename}}
+    </div>
+  {{/if}}
+  <div class="code-block-body">
+    <pre class="code-block-pre">{{@text}}</pre>
+    <i
+      class="code-block-clipboard las
+        {{if this.copyText.isRunning 'la-clipboard-check copied' 'la-clipboard'}}"
+      {{on 'click' (perform this.copyText)}}
+    ></i>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+a {
+  text-decoration: inherit;
+}
+
+a:link,
+a:visited {
+  color: var(--neutral-blue);
+}
+
+a:hover,
+a:active {
+  color: var(--neutral-blue-75);
+}

@@ -1,0 +1,38 @@
+.code-block {
+  border-radius: 4px;
+  overflow: hidden;
+  background-color: var(--gray-25);
+  outline: 1px solid var(--gray-50);
+}
+
+.code-block-header {
+  padding: 10px;
+  border-bottom: 1px solid var(--gray-50);
+  font-size: 12px;
+}
+
+.code-block-body {
+  display: grid;
+  grid-template-columns: auto 35px;
+}
+
+.code-block-clipboard {
+  padding: 10px;
+  color: var(--black-50);
+}
+
+.code-block-clipboard:hover {
+  cursor: pointer;
+  color: var(--black);
+}
+
+.code-block-clipboard.copied {
+  color: var(--black);
+}
+
+.code-block-pre {
+  margin: 0;
+  padding: 10px;
+  font-size: 14px;
+  overflow: scroll;
+}
