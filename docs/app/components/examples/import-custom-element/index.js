@@ -7,6 +7,6 @@ import 'event-perk-grid/custom-element';
 // Optionally import this file for basic CSS
 import 'event-perk-grid/index.css';
 
-export default class PerkGridWithCustomElementComponent extends Component {
+export default class PerkGridImportCustomElementComponent extends Component {
   eventId = ENV.EVENT_ID;
 }

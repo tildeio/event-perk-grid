@@ -9,7 +9,7 @@ import { fetchData, render } from 'event-perk-grid';
 // Optionally import this file for basic CSS
 import 'event-perk-grid/index.css';
 
-export default class PerkGridWithCustomElementComponent extends Component {
+export default class PerkGridUsingAPIsComponent extends Component {
   @tracked errorMessage = null;
 
   get data() {
