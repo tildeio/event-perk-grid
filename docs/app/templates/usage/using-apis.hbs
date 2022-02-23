@@ -1,1 +1,31 @@
-{{page-title 'APIs'}}<Examples::apis />
+{{page-title 'Using the APIs'}}
+<h2 {{anchor}}>
+  Custom implementation using Event Perk Grid APIs
+</h2>
+<p>
+  Import {{code "fetchData"}} and/or {{code "render"}} methods directly for a custom implementation of the grid of sponsorship packages and their perks using data from the Tilde Events App API.
+</p>
+<h3 {{anchor}}>Use Cases</h3>
+<h4 {{anchor}}>Legacy Browsers</h4>
+<p>
+  If you need to support legacy browsers that are not compatible with the
+  <a href="https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry">Custom Element Registry</a>,
+  you can still use both {{code "fetchData"}} and {{code "render"}}, but you will need to handle loading and error states as shown below.
+  Optionally, you can also import this library's CSS file to provide minimal CSS grid styles.
+</p>
+<h4 {{anchor}}>Custom Loading or Error States</h4>
+<p>
+  If you want to implement custom loading and/or error states,
+  you can use both {{code "fetchData"}} and {{code "render"}} with custom loading and error states as shown below.
+  Optionally, you can also import this library's CSS file to provide minimal CSS grid styles.
+</p>
+<h4 {{anchor}}>Custom Rendering</h4>
+<p>
+  If you want to render the event perk grid data significantly differently than how our custom element renders the data,
+  you can still use {{code "fetchData"}} but must render the data on your own.
+</p>
+<h3 {{anchor}}>API documentation</h3>
+<p>
+  For more details, see the <a href="/api/modules/index.html">API docs</a>.
+</p>
+<Example @component="apis" />
