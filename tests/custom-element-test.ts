@@ -6,7 +6,7 @@ import type {
   PerkGridError,
 } from '../src/custom-element';
 import { PerkGridFetchError } from '../src/fetch-data';
-import { assertExists } from '../src/types/utils';
+import { assertExists, assertType } from '../src/types/utils';
 import { assertGrid } from './helpers/assert-grid';
 import { expectGetEvent } from './helpers/server';
 import {
@@ -55,6 +55,7 @@ async function renderCustomElement(
 
     if (dataSet) {
       Object.entries(dataSet).forEach(([key, value]) => {
+        assertType(typeof value === 'string', 'expected value to be a string');
         perkGrid.dataset[key] = value;
       });
     }

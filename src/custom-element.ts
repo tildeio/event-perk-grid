@@ -3,6 +3,13 @@ import { render } from './render';
 import { PerkGridTypeError } from './types/utils';
 import { div } from './utils/rendering';
 
+export interface PerkGridDataSet {
+  eventId?: string;
+  gridTitle?: string;
+  placeholderText?: string;
+  errorText?: string;
+}
+
 /**
  * This error will be thrown in the event that the perk-grid element cannot be
  * rendered.
@@ -27,7 +34,8 @@ export class PerkGrid extends HTMLElement {
   async connectedCallback(): Promise<void> {
     this.dispatchEvent(new CustomEvent('connecting'));
 
-    const { eventId, gridTitle, placeholderText, errorText } = this.dataset;
+    const { eventId, gridTitle, placeholderText, errorText } = this
+      .dataset as PerkGridDataSet;
 
     const placeholder = div('epg_loading', {
       textContent: placeholderText ?? 'Loading...',
