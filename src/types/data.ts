@@ -2,7 +2,7 @@ import { inspect } from '../utils/inspect';
 import { assertType, isRecord } from './utils';
 
 /**
- * Perk types
+ * @see {@link PerkType}
  */
 export const PERK_TYPES = [
   'simple' as const,
@@ -10,6 +10,12 @@ export const PERK_TYPES = [
   'freeform' as const,
 ];
 
+/**
+ * The type of perk. One of:
+ * - "simple": a boolean perk
+ * - "quantity": a quantifiable perk
+ * - "freeform": a custom perk type
+ */
 export type PerkType = typeof PERK_TYPES[number];
 
 export function assertIsPerkType(item: unknown): asserts item is PerkType {
@@ -24,11 +30,20 @@ export function assertIsPerkType(item: unknown): asserts item is PerkType {
   );
 }
 
+/**
+ * Data for an Event Perk. Perks in draft state will not be included.
+ */
 export type Perk = {
+  /** Perk ID */
   id: string;
+  /** Perk description */
   description: string;
   type: PerkType;
+  /** If true, the perk is available only in limited quantities. */
   limited: boolean;
+  /**
+   * If true, the perk is available only in limited quantities AND is sold out.
+   */
   soldOut: boolean;
 };
 
@@ -58,6 +73,13 @@ export function assertIsPerk(item: unknown): asserts item is Perk {
   );
 }
 
+/**
+ * The value for the {@link Perk} for the {@link Package}.
+ * The type depends on the PerkType:
+ * - "simple": boolean
+ * - "quantity": number | 'all'
+ * - "freeform": string
+ */
 export type PerkValue = number | string | boolean;
 
 export function assertsIsPerkValue(item: unknown): asserts item is PerkValue {
@@ -76,6 +98,11 @@ export function assertsIsPerkValue(item: unknown): asserts item is PerkValue {
   }
 }
 
+/**
+ * For convenience, Perks are listed at both the top level and underneath the
+ * relevant packages. When listed under their packages, the Perk object includes
+ * the {@link PerkValue}.
+ */
 export type PerkWithValue = Perk & { value: PerkValue };
 
 export function assertIsPerkWithValue(
@@ -88,11 +115,22 @@ export function assertIsPerkWithValue(
   assertsIsPerkValue(value);
 }
 
+/**
+ * Data for an Event Package. Packages in draft state will not be included.
+ */
 export type Package = {
+  /** Package ID */
   id: string;
+  /** Package name */
   name: string;
+  /** Integer price of the package */
   price: number;
+  /** If true, the package is available only in limited quantities. */
   limited: boolean;
+  /**
+   * If true, the package is available only in limited quantities AND is sold
+   * out.
+   */
   soldOut: boolean;
   perks: PerkWithValue[];
 };
@@ -133,8 +171,13 @@ export function assertIsPackage(item: unknown): asserts item is Package {
   perks.forEach((p) => assertIsPerk(p));
 }
 
+/**
+ * Data for an event perk grid.
+ */
 export type EventData = {
+  /** Event ID */
   id: string;
+  /** Event name */
   name: string;
   packages: Package[];
   perks: Perk[];

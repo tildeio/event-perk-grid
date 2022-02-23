@@ -1,8 +1,4 @@
-<p>
-  <FetchExampleFile @file={{concat @component '/README.md'}} as |fetched|>
-    {{fetched.text}}
-  </FetchExampleFile>
-</p>
+<h3 {{anchor}}>Example Code</h3>
 <p>
   <FetchExampleFile @file={{concat @component '/index.js'}} as |fetched|>
     <CodeBlock @file={{fetched.file}} @text={{fetched.text}} />
@@ -13,6 +9,7 @@
     <CodeBlock @file={{fetched.file}} @text={{fetched.text}} />
   </FetchExampleFile>
 </p>
+<h3 {{anchor}}>Result</h3>
 <p>
   {{component (concat 'examples/' @component)}}
 </p>

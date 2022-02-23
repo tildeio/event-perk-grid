@@ -3,14 +3,14 @@ import { div } from './utils/rendering';
 
 export interface RenderOptions {
   /**
-   * If provided, the text-content of the top-left corner of the perk grid will
-   * be set to this text.
+   * If provided, the text-content of the first cell of the perk grid will be
+   * set to this text.
    */
   gridTitle?: string | undefined;
 }
 
 /**
- * Replaces the contents of the given parent element with a grid of event
+ * Replaces the contents of the given parent element with an html grid of event
  * sponsorship packages and perks.
  */
 export function render(
