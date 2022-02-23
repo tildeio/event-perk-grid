@@ -7,9 +7,10 @@ export default class Router extends EmberRouter {
 }
 
 Router.map(function () {
-  this.route('getting-started');
-  this.route('examples', function () {
-    this.route('custom-element');
+  this.route('installation');
+  this.route('usage', function () {
+    this.route('script-tag-custom-element');
+    this.route('import-custom-element');
     this.route('using-apis');
   });
 });

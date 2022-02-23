@@ -1,11 +1,21 @@
 'use strict';
 
 const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+const Funnel = require('broccoli-funnel');
 
 module.exports = function (defaults) {
   let app = new EmberApp(defaults, {
     // Add options here
   });
+
+  let trees = [];
+
+  const examples = new Funnel('app/components/examples', {
+    srcDir: '/',
+    destDir: 'examples',
+    annotation: 'Examples',
+  });
+  trees.push(examples);
 
   // Use `app.import` to add additional libraries to the generated
   // output files.
@@ -22,5 +32,7 @@ module.exports = function (defaults) {
   app.import('node_modules/modern-normalize/modern-normalize.css');
 
   const { Webpack } = require('@embroider/webpack');
-  return require('@embroider/compat').compatBuild(app, Webpack);
+  return require('@embroider/compat').compatBuild(app, Webpack, {
+    extraPublicTrees: trees,
+  });
 };

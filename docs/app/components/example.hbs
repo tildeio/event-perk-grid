@@ -1,0 +1,18 @@
+<p>
+  <FetchExampleFile @file={{concat @component '/README.md'}} as |fetched|>
+    {{fetched.text}}
+  </FetchExampleFile>
+</p>
+<p>
+  <FetchExampleFile @file={{concat @component '/index.js'}} as |fetched|>
+    <CodeBlock @file={{fetched.file}} @text={{fetched.text}} />
+  </FetchExampleFile>
+</p>
+<p>
+  <FetchExampleFile @file={{concat @component '/index.hbs'}} as |fetched|>
+    <CodeBlock @file={{fetched.file}} @text={{fetched.text}} />
+  </FetchExampleFile>
+</p>
+<p>
+  {{component (concat 'examples/' @component)}}
+</p>

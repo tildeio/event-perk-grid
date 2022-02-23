@@ -1,0 +1,13 @@
+{{#if this.errorMessage}}
+  <p>
+    {{this.errorMessage}}
+  </p>
+{{else if this.text}}
+  {{yield (hash file=(concat 'app/components/examples/' @file) text=this.text)}}
+{{else}}
+  <div
+    class="spinner"
+    aria-label={{concat 'Loading text for ' @file}}
+    {{this.startFileFetch}}
+  ></div>
+{{/if}}
