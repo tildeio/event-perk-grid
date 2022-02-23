@@ -47,6 +47,10 @@ export async function fetchData(eventId: string): Promise<EventData> {
       response.status
     );
   } catch (error: unknown) {
+    if (error instanceof PerkGridFetchError) {
+      throw error;
+    }
+
     throw new PerkGridFetchError(
       `Problem fetching data for event id "${eventId}", error=${String(error)}`
     );
