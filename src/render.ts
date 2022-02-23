@@ -21,11 +21,15 @@ export function render(
   const grid = div('epg_grid', { role: 'grid' });
   grid.setAttribute('style', `--epg-column-count: ${data.packages.length}`);
 
-  const header = div('epg_header epg_rowgroup', { role: 'rowgroup' });
-  grid.append(header);
+  grid.append(header(gridTitle, data), body(data), footer(data));
+
+  parent.replaceChildren(grid);
+}
+
+function header(gridTitle: string, data: EventData) {
+  const el = div('epg_header epg_rowgroup', { role: 'rowgroup' });
 
   const headerRow = div('epg_row', { role: 'row' });
-  header.append(headerRow);
 
   const title = div('epg_cell epg_columnheader', {
     role: 'columnheader',
@@ -33,30 +37,13 @@ export function render(
   });
 
   headerRow.append(title, ...data.packages.map((pkg) => packageHeader(pkg)));
+  el.append(headerRow);
 
-  const body = div('epg_body epg_rowgroup', { role: 'rowgroup' });
-  grid.append(body);
-
-  body.append(...data.perks.map((perk) => perkRow(perk, data.packages)));
-
-  const footer = div('epg_footer epg_rowgroup', { role: 'rowgroup' });
-  grid.append(footer);
-
-  const footerRow = div('epg_row', { role: 'row' });
-  footer.append(footerRow);
-
-  const footerHeader = div('epg_cell', { role: 'rowheader' });
-  footerHeader.setAttribute('aria-label', 'Package price');
-  footerRow.append(
-    footerHeader,
-    ...data.packages.map((pkg) => packageFooter(pkg))
-  );
-
-  parent.replaceChildren(grid);
+  return el;
 }
 
 function packageHeader(pkg: Package): HTMLDivElement {
-  const header = div('epg_cell epg_columnheader epg_package', {
+  const el = div('epg_cell epg_columnheader epg_package', {
     role: 'columnheader',
   });
 
@@ -71,14 +58,23 @@ function packageHeader(pkg: Package): HTMLDivElement {
     attributes.textContent = 'Limited quantities';
   }
 
-  header.append(name, attributes);
-  return header;
+  el.append(name, attributes);
+
+  return el;
+}
+
+function body(data: EventData) {
+  const el = div('epg_body epg_rowgroup', { role: 'rowgroup' });
+
+  el.append(...data.perks.map((perk) => perkRow(perk, data.packages)));
+
+  return el;
 }
 
 function perkRow(perk: Perk, packages: Package[]): HTMLDivElement {
-  const row = div('epg_row', { role: 'row' });
+  const el = div('epg_row', { role: 'row' });
 
-  const header = div('epg_cell epg_rowheader', { role: 'rowheader' });
+  const rowHeader = div('epg_cell epg_rowheader', { role: 'rowheader' });
 
   const description = div('epg_perk-description', {
     textContent: perk.description,
@@ -93,12 +89,10 @@ function perkRow(perk: Perk, packages: Package[]): HTMLDivElement {
     attributes.textContent = 'Limited quantities';
   }
 
-  header.append(description, attributes);
+  rowHeader.append(description, attributes);
+  el.append(rowHeader, ...packages.map((pkg) => perkValue(perk, pkg)));
 
-  row.append(header);
-  row.append(...packages.map((pkg) => perkValue(perk, pkg)));
-
-  return row;
+  return el;
 }
 
 function perkValue(perk: Perk, pkg: Package): HTMLDivElement {
@@ -106,7 +100,7 @@ function perkValue(perk: Perk, pkg: Package): HTMLDivElement {
     (perkWithValue) => perkWithValue.id === perk.id
   )?.value;
 
-  const cell = div(
+  const el = div(
     `epg_cell epg_perk-value epg_perk-value-${perk.type} epg_perk-value-${
       value ? 'truthy' : 'falsy'
     }`,
@@ -132,9 +126,26 @@ function perkValue(perk: Perk, pkg: Package): HTMLDivElement {
     // no default
   }
 
-  cell.textContent = textContent;
+  el.textContent = textContent;
 
-  return cell;
+  return el;
+}
+
+function footer(data: EventData) {
+  const el = div('epg_footer epg_rowgroup', { role: 'rowgroup' });
+
+  const footerRow = div('epg_row', { role: 'row' });
+
+  const footerHeader = div('epg_cell', { role: 'rowheader' });
+  footerHeader.setAttribute('aria-label', 'Package price');
+
+  footerRow.append(
+    footerHeader,
+    ...data.packages.map((pkg) => packageFooter(pkg))
+  );
+  el.append(footerRow);
+
+  return el;
 }
 
 function packageFooter(pkg: Package): HTMLDivElement {
