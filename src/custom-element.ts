@@ -73,6 +73,11 @@ export class PerkGrid extends HTMLElement {
   }
 }
 
-customElements.define('perk-grid', PerkGrid);
-
-export {};
+if (customElements.get('perk-grid')) {
+  // eslint-disable-next-line no-console
+  console.warn(
+    'Cannot re-register perk-grid custom element. It was already registered.'
+  );
+} else {
+  customElements.define('perk-grid', PerkGrid);
+}

@@ -1,6 +1,6 @@
 {{page-title 'Importing Custom Element'}}
 <h2 {{anchor}}>
-  Registering the Perk Grid element with an import statement
+  Registering the Perk Grid element with a script tag
 </h2>
 <p>
   Register the
@@ -9,4 +9,11 @@
   Optionally, you can also include this library's CSS file to provide minimal CSS grid styles.
 </p>
 <PerkGridElementDocs />
-<Example @component="script-tag-custom-element" />
+<h3 {{anchor}}>Example Code</h3>
+<p>
+  <FetchExampleFile @file={{concat 'script-tag-custom-element/index.hbs'}} as |fetched|>
+    <CodeBlock @file="index.html" @text={{fetched.text}} />
+  </FetchExampleFile>
+</p>
+<h3 {{anchor}}>Result</h3>
+<Examples::ScriptTagCustomElement />
