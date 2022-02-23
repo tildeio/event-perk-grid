@@ -1,8 +1,12 @@
-.code-block {
-  border-radius: 4px;
-  overflow: hidden;
+.code-block,
+.code-snippet {
   background-color: var(--gray-25);
   outline: 1px solid var(--gray-50);
+}
+
+.code-block {
+  overflow: hidden;
+  border-radius: 4px;
 }
 
 .code-block-header {
@@ -30,9 +34,19 @@
   color: var(--black);
 }
 
+.code-block-pre,
+.code-snippet {
+  font-size: 14px;
+}
+
 .code-block-pre {
   margin: 0;
   padding: 10px;
-  font-size: 14px;
   overflow: scroll;
+}
+
+.code-snippet {
+  margin: 0 2px;
+  padding: 2px 4px;
+  border-radius: 2px;
 }
