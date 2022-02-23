@@ -31,14 +31,26 @@ export function render(
     role: 'columnheader',
     textContent: gridTitle,
   });
-  headerRow.append(title);
 
-  headerRow.append(...data.packages.map((pkg) => packageHeader(pkg)));
+  headerRow.append(title, ...data.packages.map((pkg) => packageHeader(pkg)));
 
   const body = div('epg_body epg_rowgroup', { role: 'rowgroup' });
   grid.append(body);
 
   body.append(...data.perks.map((perk) => perkRow(perk, data.packages)));
+
+  const footer = div('epg_footer epg_rowgroup', { role: 'rowgroup' });
+  grid.append(footer);
+
+  const footerRow = div('epg_row', { role: 'row' });
+  footer.append(footerRow);
+
+  const footerHeader = div('epg_cell', { role: 'rowheader' });
+  footerHeader.setAttribute('aria-label', 'Package price');
+  footerRow.append(
+    footerHeader,
+    ...data.packages.map((pkg) => packageFooter(pkg))
+  );
 
   parent.replaceChildren(grid);
 }
@@ -50,15 +62,6 @@ function packageHeader(pkg: Package): HTMLDivElement {
 
   const name = div('epg_package-name', { textContent: pkg.name });
 
-  const price = div('epg_package-price', {
-    textContent: pkg.price.toLocaleString('en-US', {
-      style: 'currency',
-      currency: 'USD',
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }),
-  });
-
   const attributes = div('epg_package-attributes');
   if (pkg.soldOut) {
     attributes.classList.add('epg_package-sold-out');
@@ -68,7 +71,7 @@ function packageHeader(pkg: Package): HTMLDivElement {
     attributes.textContent = 'Limited quantities';
   }
 
-  header.append(name, price, attributes);
+  header.append(name, attributes);
   return header;
 }
 
@@ -132,4 +135,16 @@ function perkValue(perk: Perk, pkg: Package): HTMLDivElement {
   cell.textContent = textContent;
 
   return cell;
+}
+
+function packageFooter(pkg: Package): HTMLDivElement {
+  return div('epg_cell epg_package', {
+    role: 'gridcell',
+    textContent: pkg.price.toLocaleString('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }),
+  });
 }

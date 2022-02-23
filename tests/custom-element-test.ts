@@ -90,10 +90,11 @@ module('custom element', function (hooks) {
     await renderCustomElement(this, { dataSet: { eventId: mockEvent.id } });
 
     assertGrid(assert, [
-      ['', 'Package 1$1,000', 'Package 2$2,000', 'Package 3$3,000'],
+      ['', 'Package 1', 'Package 2', 'Package 3'],
       ['Perk 1', '✓', '✓', '✓'],
       ['Perk 2', '✓', '✓', '✕'],
       ['Perk 3', '✓', '✕', '✕'],
+      ['', '$1,000', '$2,000', '$3,000'],
     ]);
     assert.dom('style').doesNotExist();
     assert.dom('.epg_grid').doesNotHaveStyle({ display: 'grid' });
@@ -114,8 +115,9 @@ module('custom element', function (hooks) {
     });
 
     assertGrid(assert, [
-      ['', 'Package 1$1,000'],
+      ['', 'Package 1'],
       ['Perk 1', '✓'],
+      ['', '$1,000'],
     ]);
     assert.strictEqual(loadingCount, 1);
   });
@@ -176,8 +178,9 @@ module('custom element', function (hooks) {
     });
 
     assertGrid(assert, [
-      ['Sponsorship Packages', 'Package 1$1,000'],
+      ['Sponsorship Packages', 'Package 1'],
       ['Perk 1', '✓'],
+      ['', '$1,000'],
     ]);
 
     // This would fail if we used shadow dom

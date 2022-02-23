@@ -12,10 +12,11 @@ module('render', function (hooks) {
     render(this.element, data);
 
     assertGrid(assert, [
-      ['', 'Package 1$1,000', 'Package 2$2,000', 'Package 3$3,000'],
+      ['', 'Package 1', 'Package 2', 'Package 3'],
       ['Perk 1', '✓', '✓', '✓'],
       ['Perk 2', '✓', '✓', '✕'],
       ['Perk 3', '✓', '✕', '✕'],
+      ['', '$1,000', '$2,000', '$3,000'],
     ]);
     assert.dom('style').doesNotExist();
     assert.dom('.epg_grid').doesNotHaveStyle({ display: 'grid' });
@@ -27,8 +28,9 @@ module('render', function (hooks) {
     render(this.element, data);
 
     assertGrid(assert, [
-      ['', 'Package 1$1,000'],
+      ['', 'Package 1'],
       ['Perk 1', '✓'],
+      ['', '$1,000'],
     ]);
 
     assert
@@ -58,8 +60,9 @@ module('render', function (hooks) {
     render(this.element, data);
 
     assertGrid(assert, [
-      ['', 'Package 1$1,000'],
+      ['', 'Package 1'],
       ['Perk 1', '✓'],
+      ['', '$1,000'],
     ]);
     assert.dom('#replace-me').doesNotExist('The element was replaced');
   });

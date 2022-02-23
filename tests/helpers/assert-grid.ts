@@ -1,7 +1,10 @@
-export function assertGrid(
-  assert: Assert,
-  [header, ...rows]: [header: string[], ...rows: string[][]]
-): void {
+import { assertExists } from '../../src/types/utils';
+
+export function assertGrid(assert: Assert, grid: string[][]): void {
+  const header = assertExists(grid.shift());
+  const footer = assertExists(grid.pop());
+  const rows = grid;
+
   assert.dom('.epg_loading').doesNotExist();
   assert.dom('.epg_error').doesNotExist();
 
@@ -47,5 +50,14 @@ export function assertGrid(
         .hasText(text)
         .hasAttribute('role', cellNumber ? 'gridcell' : 'rowheader');
     });
+  });
+
+  assert.dom('.epg_footer').exists().hasAttribute('role', 'rowgroup');
+  assert.dom('.epg_footer .epg_row').exists().hasAttribute('role', 'row');
+  footer.forEach((text, cellNumber) => {
+    assert
+      .dom(`.epg_footer .epg_cell:nth-child(${cellNumber + 1})`)
+      .hasText(text)
+      .hasAttribute('role', cellNumber ? 'gridcell' : 'rowheader');
   });
 }

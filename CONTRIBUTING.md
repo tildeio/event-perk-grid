@@ -1,5 +1,12 @@
 # How To Contribute
 
+## TODOS:
+
+- [ ] accessibility
+- [ ] responsiveness: list with package top level and sub-list of perks for each package
+- [ ] e2e tests
+- [ ] Verify CORs settings
+
 ## Installation
 
 - `git clone <repository-url>`
