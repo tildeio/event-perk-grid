@@ -12,7 +12,7 @@
 <h3 {{anchor}}>Example Code</h3>
 <p>
   <FetchExampleFile @file={{concat 'script-tag-custom-element/index.hbs'}} as |fetched|>
-    <CodeBlock @file="index.html" @text={{fetched.text}} />
+    <CodeBlock @file="index.html" @text={{fetched.text}} @language="html" />
   </FetchExampleFile>
 </p>
 <h3 {{anchor}}>Result</h3>

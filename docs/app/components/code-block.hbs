@@ -5,7 +5,7 @@
     </div>
   {{/if}}
   <div class="code-block-body">
-    <pre class="code-block-pre">{{@text}}</pre>
+    <pre class="code-block-pre hljs"><code>{{this.highlightedText}}</code></pre>
     <i
       class="code-block-clipboard las
         {{if this.copyText.isRunning 'la-clipboard-check copied' 'la-clipboard'}}"

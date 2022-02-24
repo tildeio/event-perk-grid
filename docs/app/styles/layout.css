@@ -1,6 +1,6 @@
 body {
   min-height: 100vh;
-  background-color: var(--gray-25);
+  background-color: var(--nord6);
 }
 
 .application-container {
@@ -13,7 +13,7 @@ body {
   align-items: center;
   justify-content: space-between;
   font-size: 16px;
-  border-bottom: 1px solid var(--gray-25);
+  border-bottom: 1px solid var(--nord6);
 }
 
 .application-header h1 {
@@ -61,7 +61,7 @@ body {
     grid-row: body-start / body-end;
     margin-top: var(--main-header-height);
     padding-left: 16px;
-    border-left: 1px solid var(--gray-25);
+    border-left: 1px solid var(--nord6);
   }
 
   .application {

@@ -1,12 +1,12 @@
 <h3 {{anchor}}>Example Code</h3>
 <p>
   <FetchExampleFile @file={{concat @component '/index.js'}} as |fetched|>
-    <CodeBlock @file={{fetched.file}} @text={{fetched.text}} />
+    <CodeBlock @file={{fetched.file}} @text={{fetched.text}} @language="javascript" />
   </FetchExampleFile>
 </p>
 <p>
   <FetchExampleFile @file={{concat @component '/index.hbs'}} as |fetched|>
-    <CodeBlock @file={{fetched.file}} @text={{fetched.text}} />
+    <CodeBlock @file={{fetched.file}} @text={{fetched.text}} @language="handlebars" />
   </FetchExampleFile>
 </p>
 <h3 {{anchor}}>Result</h3>

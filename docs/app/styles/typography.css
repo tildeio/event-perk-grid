@@ -4,12 +4,12 @@ a {
 
 a:link,
 a:visited {
-  color: var(--neutral-blue);
+  color: var(--nord10);
 }
 
 a:hover,
 a:active {
-  color: var(--neutral-blue-75);
+  color: var(--nord9);
 }
 
 a.active {
