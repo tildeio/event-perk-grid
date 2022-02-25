@@ -1,22 +1,23 @@
-export type DivOptions = Partial<{
-  role: string;
-  textContent: string;
-}>;
+export interface CreateElementOptions {
+  role?: string;
+  textContent?: string;
+}
 
-export function div(
+export function createElement<K extends keyof HTMLElementTagNameMap>(
+  tagName: K,
   className: string,
-  { role, textContent }: DivOptions = {}
-): HTMLDivElement {
-  const element = document.createElement('div');
+  { role, textContent }: CreateElementOptions = {}
+): HTMLElementTagNameMap[K] {
+  const el = document.createElement(tagName);
 
   if (role) {
-    element.setAttribute('role', role);
+    el.setAttribute('role', role);
   }
-  element.setAttribute('class', className);
+  el.setAttribute('class', className);
 
   if (textContent) {
-    element.textContent = textContent;
+    el.textContent = textContent;
   }
 
-  return element;
+  return el;
 }

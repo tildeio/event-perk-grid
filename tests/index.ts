@@ -1,4 +1,5 @@
 import 'qunit/qunit/qunit.css';
+import '../src/index.css';
 import './test-styles.css';
 
 import 'qunit';

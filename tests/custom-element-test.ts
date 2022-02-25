@@ -60,10 +60,6 @@ async function renderCustomElement(
       });
     }
 
-    if (dataSet?.eventId) {
-      perkGrid.dataset['eventId'] = dataSet.eventId;
-    }
-
     context.element.append(perkGrid);
   });
 }
@@ -71,7 +67,7 @@ async function renderCustomElement(
 function renderCustomStyleElement(context: Context, assert: Assert): void {
   const style = document.createElement('style');
   style.innerHTML = `
-    .epg_grid { display: grid; }
+    .epg_grid { color: rgb(1, 2, 3); }
     .epg_loading { font-size: 24px; }
     .epg_error { font-size: 42px; }
   `;
@@ -87,7 +83,9 @@ module('custom element', function (hooks) {
     const mockEvent = this.factory.makeEventData();
     this.server.use(expectGetEvent(assert, mockEvent));
 
-    await renderCustomElement(this, { dataSet: { eventId: mockEvent.id } });
+    await renderCustomElement(this, {
+      dataSet: { eventId: mockEvent.id },
+    });
 
     assertGrid(assert, [
       ['', 'Package 1', 'Package 2', 'Package 3'],
@@ -96,8 +94,6 @@ module('custom element', function (hooks) {
       ['Perk 3', '✓', '✕', '✕'],
       ['', '$1,000', '$2,000', '$3,000'],
     ]);
-    assert.dom('style').doesNotExist();
-    assert.dom('.epg_grid').doesNotHaveStyle({ display: 'grid' });
   });
 
   test('has a placeholder', async function (this: Context, assert) {
@@ -186,7 +182,7 @@ module('custom element', function (hooks) {
     // This would fail if we used shadow dom
     assert
       .dom('.epg_grid')
-      .hasStyle({ display: 'grid' }, 'the style applied properly');
+      .hasStyle({ color: 'rgb(1, 2, 3)' }, 'the style applied properly');
     assert.strictEqual(loadingCount, 1);
   });
 

@@ -1,7 +1,7 @@
 import { fetchData, PerkGridFetchError } from './fetch-data';
-import { render, CLASSES as GRID_CLASSES } from './render';
+import { render, CLASSES as GRID_CLASSES, DisplayOption } from './render';
 import { PerkGridTypeError } from './types/utils';
-import { div } from './utils/rendering';
+import { createElement } from './utils/rendering';
 
 /**
  * The values listed here are used as CSS classes. See source link for more
@@ -47,6 +47,48 @@ export interface PerkGridDataSet {
    * Optional error text to override the default text.
    */
   errorText?: string;
+
+  /**
+   * Set attribute `data-display`.
+   *
+   * Choose one of three options:
+   * - "grid": The grid will always be displayed multiple columns.
+   * - "list": The grid will be collapsed into a single column of packages. Each
+   *   package will have a list (`<ul>`) of its perks displayed within its cell.
+   *   NOTE: The grid "list" will still be made up of `<div>` elements with the
+   *   `role="grid"` attribute, not a `<ul>` element.
+   * - "responsive" (default): The grid will be displayed as a single column on
+   *   small screens and multiple columns on large screens. The breakpoint at
+   *   which the view is switched from single-column to multi-column format is
+   *   the minimum width necessary for the grid element to display all columns
+   *   at their specified minimum widths. See
+   *   {@link PerkGridDataSet.minWidthPerk} and
+   *   {@link PerkGridDataSet.minWidthPackage}.
+   *   NOTE: These docs assume you are importing the default CSS.
+   */
+  display?: DisplayOption;
+
+  /**
+   * The minimum width (in pixels) for displaying the Perk header column when
+   * the grid is displayed with multiple columns.
+   *
+   * Defaults to `200` (200px).
+   *
+   * NOTE: If the `display` option is set to "list", this option will not be
+   * used.
+   */
+  minWidthPerk?: number | undefined;
+
+  /**
+   * The minimum width (in pixels) for displaying the Package columns when
+   * the grid is displayed with multiple columns.
+   *
+   * Defaults to `100` (100px).
+   *
+   * NOTE: If the `display` option is set to "list", this option will not be
+   * used.
+   */
+  minWidthPackage?: number | undefined;
 }
 
 /**
@@ -157,10 +199,17 @@ export class PerkGrid extends HTMLElement {
   async connectedCallback(): Promise<void> {
     this.dispatchEvent(new CustomEvent('connecting') as ConnectingEvent);
 
-    const { eventId, gridTitle, placeholderText, errorText } = this
-      .dataset as Partial<PerkGridDataSet>;
+    const {
+      eventId,
+      gridTitle,
+      placeholderText,
+      errorText,
+      display,
+      minWidthPerk,
+      minWidthPackage,
+    } = this.dataset as Partial<PerkGridDataSet>;
 
-    const placeholder = div(CLASSES.loading, {
+    const placeholder = createElement('div', CLASSES.loading, {
       textContent: placeholderText ?? 'Loading...',
     });
     this.append(placeholder);
@@ -175,7 +224,12 @@ export class PerkGrid extends HTMLElement {
 
     try {
       const data = await fetchData(eventId);
-      render(this, data, { gridTitle });
+      render(this, data, {
+        gridTitle,
+        display,
+        minWidthPerk,
+        minWidthPackage,
+      });
     } catch (error: unknown) {
       this.dispatchEvent(
         new CustomEvent('error', { detail: error }) as ErrorEvent
@@ -185,7 +239,7 @@ export class PerkGrid extends HTMLElement {
         error instanceof PerkGridFetchError ||
         error instanceof PerkGridTypeError
       ) {
-        const errorMessage = div(CLASSES.error, {
+        const errorMessage = createElement('div', CLASSES.error, {
           textContent:
             errorText ?? 'There was a problem loading data for the perk grid.',
         });

@@ -3,9 +3,9 @@
 ## TODOS:
 
 - [ ] accessibility
-- [ ] responsiveness: list with package top level and sub-list of perks for each package
 - [ ] e2e tests
 - [ ] Verify CORs settings
+- [ ] docs 404 pages
 
 ## Installation
 

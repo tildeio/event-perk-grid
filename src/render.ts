@@ -1,5 +1,8 @@
 import { EventData, Package, Perk, PerkValue } from './types/data';
-import { div } from './utils/rendering';
+import debounce from './utils/debounce';
+import { createElement } from './utils/rendering';
+
+export type DisplayOption = 'responsive' | 'grid' | 'list';
 
 export interface RenderOptions {
   /**
@@ -7,6 +10,45 @@ export interface RenderOptions {
    * set to this text.
    */
   gridTitle?: string | undefined;
+
+  /**
+   * Choose one of three options:
+   * - "grid": The grid will always be displayed multiple columns.
+   * - "list": The grid will be collapsed into a single column of packages. Each
+   *   package will have a list (`<ul>`) of its perks displayed within its cell.
+   *   NOTE: The grid "list" will still be made up of `<div>` elements with the
+   *   `role="grid"` attribute, not a `<ul>` element.
+   * - "responsive" (default): The grid will be displayed as a single column on
+   *   small screens and multiple columns on large screens. The breakpoint at
+   *   which the view is switched from single-column to multi-column format is
+   *   the minimum width necessary for the grid element to display all columns
+   *   at their specified minimum widths. See {@link RenderOptions.minWidthPerk}
+   *   and {@link RenderOptions.minWidthPackage}.
+   *   NOTE: These docs assume you are importing the default CSS.
+   */
+  display?: DisplayOption | undefined;
+
+  /**
+   * The minimum width (in pixels) for displaying the Perk header column when
+   * the grid is displayed with multiple columns.
+   *
+   * Defaults to `200` (200px).
+   *
+   * NOTE: If the `display` option is set to "list", this option will not be
+   * used.
+   */
+  minWidthPerk?: number | undefined;
+
+  /**
+   * The minimum width (in pixels) for displaying the Package columns when
+   * the grid is displayed with multiple columns.
+   *
+   * Defaults to `100` (100px).
+   *
+   * NOTE: If the `display` option is set to "list", this option will not be
+   * used.
+   */
+  minWidthPackage?: number | undefined;
 }
 
 /**
@@ -16,6 +58,11 @@ export interface RenderOptions {
 export const CLASSES = {
   /** The parent grid element, once loaded with no error */
   grid: 'epg_grid' as const,
+  /**
+   * If the grid element has this class, the element should be displayed as a
+   * grid rather than as a list.
+   */
+  displayAsGrid: 'epg_display-as-grid' as const,
   /** The grid header rowgroup element */
   header: 'epg_header' as const,
   /** The grid body rowgroup element */
@@ -36,10 +83,12 @@ export const CLASSES = {
   package: 'epg_package' as const,
   /** All gridcell and rowheader elements related to a Perk */
   perk: 'epg_perk' as const,
+  /** Lists of perks within the package header elements */
+  packagePerkList: 'epg_package-perk-list' as const,
   /** All Package Name or Perk Description elements */
   descriptor: 'epg_descriptor' as const,
   attributes: {
-    /** All Package/Park attribute container elements */
+    /** All Package/Park attribute elements */
     container: 'epg_attributes' as const,
     /** All Package/Park "sold-out" attribute elements */
     soldOut: 'epg_attributes-sold-out' as const,
@@ -75,100 +124,196 @@ export const CLASSES = {
  * sponsorship packages and perks.
  */
 export function render(
-  parent: Element | DocumentFragment,
+  parent: Element,
   data: EventData,
-  { gridTitle = '' }: RenderOptions = {}
-): void {
-  const grid = div(CLASSES.grid, { role: 'grid' });
-  grid.setAttribute('style', `--epg-column-count: ${data.packages.length}`);
+  {
+    gridTitle = '',
+    display = 'responsive',
+    minWidthPerk = 200,
+    minWidthPackage = 100,
+  }: RenderOptions = {}
+): HTMLDivElement {
+  const columnCount = data.packages.length;
 
-  grid.append(header(gridTitle, data), body(data), footer(data));
+  const minWidthForGrid = minWidthPerk + columnCount * minWidthPackage;
+
+  const grid = createElement(
+    'div',
+    // Assume grid by default. If the responsive option is enabled, we will
+    // check the width before rendering is complete. If the responsive option is
+    // not enabled, we will display as a grid by default.
+    `${CLASSES.grid} ${display === 'list' ? '' : CLASSES.displayAsGrid}`,
+    { role: 'grid' }
+  );
+  grid.setAttribute(
+    'style',
+    `
+    --column-count: ${columnCount};
+    --min-width-perk: ${minWidthPerk}px;
+    --min-width-package: ${minWidthPackage}px;
+    --max-width-perk: ${minWidthPerk / minWidthForGrid}fr;
+    --max-width-package: ${minWidthPackage / minWidthForGrid}fr;
+    `
+  );
+
+  if (display === 'responsive') {
+    makeResponsive(grid, minWidthForGrid);
+  }
+
+  grid.append(header(gridTitle, data, display));
+
+  if (display === 'responsive' || display === 'grid') {
+    grid.append(body(data), footer(data));
+  }
 
   parent.replaceChildren(grid);
+
+  return grid;
 }
 
-function header(gridTitle: string, data: EventData) {
-  const el = div(`${CLASSES.rowgroup} ${CLASSES.header}`, { role: 'rowgroup' });
+function makeResponsive(grid: HTMLDivElement, minWidthForGrid: number) {
+  const resizeObserver = new ResizeObserver(
+    debounce((entries: ResizeObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.contentRect.width > minWidthForGrid) {
+          entry.target.classList.add(CLASSES.displayAsGrid);
+        } else {
+          grid.classList.remove(CLASSES.displayAsGrid);
+        }
+        // Private event for testing
+        grid.dispatchEvent(new CustomEvent('resized'));
+      });
+    }, 300)
+  );
 
-  const headerRow = div(CLASSES.row, { role: 'row' });
+  resizeObserver.observe(grid);
 
-  const title = div(`${CLASSES.cell} ${CLASSES.columnheader}`, {
-    role: 'columnheader',
-    textContent: gridTitle,
+  const mutationObserver = new MutationObserver(() => {
+    if (!document.body.contains(grid)) {
+      resizeObserver.disconnect();
+      mutationObserver.disconnect();
+    }
   });
 
-  headerRow.append(title, ...data.packages.map((pkg) => packageHeader(pkg)));
+  mutationObserver.observe(document.body, { childList: true, subtree: true });
+}
+
+function header(gridTitle: string, data: EventData, display: DisplayOption) {
+  const el = createElement('div', `${CLASSES.rowgroup} ${CLASSES.header}`, {
+    role: 'rowgroup',
+  });
+
+  const headerRow = createElement('div', CLASSES.row, { role: 'row' });
+
+  const title = createElement(
+    'div',
+    `${CLASSES.cell} ${CLASSES.columnheader}`,
+    {
+      role: 'columnheader',
+      textContent: gridTitle,
+    }
+  );
+
+  headerRow.append(
+    title,
+    ...data.packages.map((pkg) => packageHeader(pkg, display))
+  );
   el.append(headerRow);
 
   return el;
 }
 
-function packageHeader(pkg: Package): HTMLDivElement {
-  const el = div(`${CLASSES.cell} ${CLASSES.columnheader} ${CLASSES.package}`, {
-    role: 'columnheader',
+function packageHeader(pkg: Package, display: DisplayOption) {
+  const el = createElement(
+    'div',
+    `${CLASSES.cell} ${CLASSES.columnheader} ${CLASSES.package}`,
+    { role: 'columnheader' }
+  );
+
+  const name = createElement('div', CLASSES.descriptor, {
+    textContent: pkg.name,
   });
 
-  const name = div(CLASSES.descriptor, { textContent: pkg.name });
+  el.append(name, attributes(pkg));
 
-  const attributes = div(CLASSES.attributes.container);
-  if (pkg.soldOut) {
-    attributes.classList.add(CLASSES.attributes.soldOut);
-    attributes.textContent = 'Sold out';
-  } else if (pkg.limited) {
-    attributes.classList.add(CLASSES.attributes.limited);
-    attributes.textContent = 'Limited quantities';
+  if (display !== 'grid') {
+    el.append(perkList(pkg));
   }
 
-  el.append(name, attributes);
+  return el;
+}
+
+function perkList(pkg: Package) {
+  const el = createElement('ul', CLASSES.packagePerkList);
+
+  el.append(
+    ...pkg.perks.map((perk) => {
+      const perkEl = createElement('li', `${CLASSES.perk}`);
+
+      const description = createElement('div', CLASSES.descriptor, {
+        textContent: perk.description,
+      });
+
+      perkEl.append(description, attributes(perk));
+
+      return perkEl;
+    })
+  );
 
   return el;
 }
 
 function body(data: EventData) {
-  const el = div(`${CLASSES.rowgroup} ${CLASSES.body}`, { role: 'rowgroup' });
+  const el = createElement('div', `${CLASSES.rowgroup} ${CLASSES.body}`, {
+    role: 'rowgroup',
+  });
 
   el.append(...data.perks.map((perk) => perkRow(perk, data.packages)));
 
   return el;
 }
 
-function perkRow(perk: Perk, packages: Package[]): HTMLDivElement {
-  const el = div(CLASSES.row, { role: 'row' });
+function perkRow(perk: Perk, packages: Package[]) {
+  const el = createElement('div', CLASSES.row, { role: 'row' });
 
-  const rowHeader = div(
+  const rowHeader = createElement(
+    'div',
     `${CLASSES.cell} ${CLASSES.rowheader} ${CLASSES.perk}`,
     { role: 'rowheader' }
   );
 
-  const description = div(CLASSES.descriptor, {
+  const description = createElement('div', CLASSES.descriptor, {
     textContent: perk.description,
   });
 
-  const attributes = div(CLASSES.attributes.container);
-  if (perk.soldOut) {
-    attributes.classList.add(CLASSES.attributes.soldOut);
-    attributes.textContent = 'Sold out';
-  } else if (perk.limited) {
-    attributes.classList.add(CLASSES.attributes.limited);
-    attributes.textContent = 'Limited quantities';
-  }
-
-  rowHeader.append(description, attributes);
+  rowHeader.append(description, attributes(perk));
   el.append(rowHeader, ...packages.map((pkg) => perkValue(perk, pkg)));
 
   return el;
 }
 
-function perkValue(perk: Perk, pkg: Package): HTMLDivElement {
+function attributes(item: Perk | Package) {
+  const el = createElement('div', CLASSES.attributes.container);
+  if (item.soldOut) {
+    el.classList.add(CLASSES.attributes.soldOut);
+    el.textContent = 'Sold out';
+  } else if (item.limited) {
+    el.classList.add(CLASSES.attributes.limited);
+    el.textContent = 'Limited quantities';
+  }
+
+  return el;
+}
+
+function perkValue(perk: Perk, pkg: Package) {
   const value = pkg.perks.find(
     (perkWithValue) => perkWithValue.id === perk.id
   )?.value;
 
-  const el = div(
+  const el = createElement(
+    'div',
     `${CLASSES.cell} ${CLASSES.perk} ${CLASSES.perkValue(perk, value)}`,
-    {
-      role: 'gridcell',
-    }
+    { role: 'gridcell' }
   );
 
   let textContent = '\u2715'; // x
@@ -194,13 +339,17 @@ function perkValue(perk: Perk, pkg: Package): HTMLDivElement {
 }
 
 function footer(data: EventData) {
-  const el = div(`${CLASSES.rowgroup} ${CLASSES.footer}`, { role: 'rowgroup' });
-
-  const footerRow = div(CLASSES.row, { role: 'row' });
-
-  const footerHeader = div(`${CLASSES.cell} ${CLASSES.rowheader}`, {
-    role: 'rowheader',
+  const el = createElement('div', `${CLASSES.rowgroup} ${CLASSES.footer}`, {
+    role: 'rowgroup',
   });
+
+  const footerRow = createElement('div', CLASSES.row, { role: 'row' });
+
+  const footerHeader = createElement(
+    'div',
+    `${CLASSES.cell} ${CLASSES.rowheader}`,
+    { role: 'rowheader' }
+  );
   footerHeader.setAttribute('aria-label', 'Package price');
 
   footerRow.append(
@@ -212,8 +361,8 @@ function footer(data: EventData) {
   return el;
 }
 
-function packageFooter(pkg: Package): HTMLDivElement {
-  return div(`${CLASSES.cell} ${CLASSES.package}`, {
+function packageFooter(pkg: Package) {
+  return createElement('div', `${CLASSES.cell} ${CLASSES.package}`, {
     role: 'gridcell',
     textContent: pkg.price.toLocaleString('en-US', {
       style: 'currency',
