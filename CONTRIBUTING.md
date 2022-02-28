@@ -3,7 +3,6 @@
 ## TODOS:
 
 - [ ] accessibility
-- [ ] e2e tests
 - [ ] Verify CORs settings
 
 ## Installation
