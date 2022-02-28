@@ -5,7 +5,6 @@
 - [ ] accessibility
 - [ ] e2e tests
 - [ ] Verify CORs settings
-- [ ] docs 404 pages
 
 ## Installation
 

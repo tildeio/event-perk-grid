@@ -13,4 +13,5 @@ Router.map(function () {
     this.route('import-custom-element');
     this.route('using-apis');
   });
+  this.route('not-found', { path: '/*path' });
 });
