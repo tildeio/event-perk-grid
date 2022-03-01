@@ -1,6 +1,6 @@
 {
   "name": "event-perk-grid",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "A utility for reading and displaying Event Perk Grids.",
   "main": "dist/index.js",
   "exports": {
