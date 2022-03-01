@@ -1,10 +1,5 @@
 # How To Contribute
 
-## TODOS:
-
-- [ ] accessibility
-- [ ] Verify CORs settings
-
 ## Installation
 
 - `git clone <repository-url>`
