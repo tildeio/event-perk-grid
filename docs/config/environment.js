@@ -22,7 +22,7 @@ module.exports = function (environment) {
       // when it is created
     },
 
-    EVENT_ID: '8c6a2f80-4ffe-4635-9b2a-e2fa06540fd2',
+    EVENT_ID: '450241fc-d1f7-416d-9e8c-d1fb2c732714',
   };
 
   if (environment === 'development') {
