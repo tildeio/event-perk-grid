@@ -1,1 +1,0 @@
-.epg_grid{box-sizing:border-box;display:grid;grid-template-columns:2fr repeat(var(--epg-column-count),1fr)}.epg_row,.epg_rowgroup{display:contents}.epg_cell{border:1px solid #000}

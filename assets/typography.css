@@ -4,10 +4,33 @@ a {
 
 a:link,
 a:visited {
-  color: var(--neutral-blue);
+  color: var(--nord10);
 }
 
 a:hover,
 a:active {
-  color: var(--neutral-blue-75);
+  color: var(--nord9);
+}
+
+a.active {
+  text-decoration: underline;
+}
+
+p,
+ul,
+ol {
+  line-height: 1.5;
+}
+
+ul,
+ol {
+  padding-inline-start: 20px;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 20px 0 8px;
+  line-height: 1.25;
 }
