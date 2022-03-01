@@ -14,7 +14,7 @@ module.exports = (env, { mode }) => ({
     },
     'custom-element': {
       import: './src/custom-element.ts',
-      library: { type: 'amd', name: 'PerkGrid' },
+      library: { type: 'var', name: 'PerkGrid' },
     },
   },
   module: {
