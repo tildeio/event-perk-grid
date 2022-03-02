@@ -1,6 +1,6 @@
 import { CLASSES } from '../css-classes';
 import { EventData, Package, Perk } from '../types/data';
-import { createElement } from '../utils/rendering';
+import { createElement } from '../utils/dom';
 import { DisplayOption } from './types';
 
 export function header(
@@ -14,17 +14,21 @@ export function header(
 
   const headerRow = createElement('div', CLASSES.row, { role: 'row' });
 
-  const title = createElement(
+  const titleContainer = createElement(
     'div',
-    `${CLASSES.cell} ${CLASSES.columnheader}`,
-    {
-      role: 'columnheader',
-      textContent: gridTitle,
-    }
+    `${CLASSES.cell} ${CLASSES.columnheader} ${CLASSES.title}`,
+    { role: 'columnheader' }
   );
 
+  if (gridTitle) {
+    const title = createElement('h1', CLASSES.caption, {
+      textContent: gridTitle,
+    });
+    titleContainer.append(title);
+  }
+
   headerRow.append(
-    title,
+    titleContainer,
     ...data.packages.map((pkg) => packageHeader(pkg, display))
   );
   el.append(headerRow);
@@ -142,30 +146,42 @@ function perkValue(perk: Perk, pkg: Package) {
     (perkWithValue) => perkWithValue.id === perk.id
   )?.value;
 
-  const el = createElement(
-    'div',
-    `${CLASSES.cell} ${CLASSES.perk} ${CLASSES.perkValue(perk, value)}`,
-    { role: 'gridcell' }
-  );
+  const el = createElement('div', `${CLASSES.cell} ${CLASSES.perk}`, {
+    role: 'gridcell',
+  });
 
+  const span = createElement('span', CLASSES.perkValue(perk, value));
+
+  let included = false;
   let textContent = '\u2715'; // x
 
   switch (perk.type) {
     case 'simple':
       if (value) {
+        included = true;
         textContent = '\u2713'; // check
+        span.ariaLabel = 'included';
+        span.setAttribute('role', 'img');
       }
       break;
     case 'quantity':
     case 'freeform':
       if (value) {
+        included = true;
         textContent = value.toString();
       }
       break;
     // no default
   }
 
-  el.textContent = textContent;
+  if (!included) {
+    span.ariaLabel = 'not included';
+    span.setAttribute('role', 'img');
+  }
+
+  span.textContent = textContent;
+
+  el.append(span);
 
   return el;
 }

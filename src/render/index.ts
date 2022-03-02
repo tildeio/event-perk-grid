@@ -1,7 +1,8 @@
 import { CLASSES } from '../css-classes';
 import { EventData } from '../types/data';
-import { createElement } from '../utils/rendering';
-import { makeResponsive } from './make-responsive';
+import { createElement } from '../utils/dom';
+import enableKeyboardNav from './enable-keyboard-nav';
+import { makeResponsive, ResizeEvent } from './make-responsive';
 import { body, footer, header } from './nodes';
 import { DisplayOption } from './types';
 
@@ -50,32 +51,44 @@ export interface RenderOptions {
    * used.
    */
   minWidthPackage?: number | undefined;
+
+  /**
+   * If true, enables keyboard navigation following WAI-ARIA Authoring Practices.
+   *
+   * Defaults to `true`.
+   *
+   * @link https://www.w3.org/TR/wai-aria-practices-1.1/examples/grid/dataGrids.html
+   */
+  allowKeyboardNavigation?: boolean | undefined;
 }
 
 /**
  * Replaces the contents of the given parent element with an html grid of event
  * sponsorship packages and perks.
+ *
+ * @fires {@link ResizeEvent}
  */
 export function render(
-  parent: Element,
+  parent: HTMLElement,
   data: EventData,
   {
     gridTitle = '',
     display = 'responsive',
     minWidthPerk = 200,
     minWidthPackage = 100,
+    allowKeyboardNavigation = true,
   }: RenderOptions = {}
 ): HTMLDivElement {
   const columnCount = data.packages.length;
+
+  const isResponsive = display === 'responsive';
+  const isList = display === 'list';
 
   const minWidthForGrid = minWidthPerk + columnCount * minWidthPackage;
 
   const grid = createElement(
     'div',
-    // Assume grid by default. If the responsive option is enabled, we will
-    // check the width before rendering is complete. If the responsive option is
-    // not enabled, we will display as a grid by default.
-    `${CLASSES.grid} ${display === 'list' ? '' : CLASSES.displayAsGrid}`,
+    `${CLASSES.grid} ${initialDisplayClass(parent, display, minWidthForGrid)}`,
     { role: 'grid' }
   );
   grid.setAttribute(
@@ -89,17 +102,45 @@ export function render(
     `
   );
 
-  if (display === 'responsive') {
+  if (isResponsive) {
     makeResponsive(grid, minWidthForGrid);
   }
 
   grid.append(header(gridTitle, data, display));
 
-  if (display === 'responsive' || display === 'grid') {
+  if (!isList) {
     grid.append(body(data), footer(data));
   }
 
   parent.replaceChildren(grid);
 
+  // NOTE: This must happen after all of the elements are appended
+  if (allowKeyboardNavigation) {
+    enableKeyboardNav(grid, isResponsive);
+  }
+
   return grid;
 }
+
+// We are assuming that the grid will take up the full width of the parent, so
+// this is a best guess. If we are wrong, there may be a brief flash on small
+// screens where the perk-grid is displayed as a grid at first before switching
+// to a list.
+function initialDisplayClass(
+  parent: HTMLElement,
+  display: DisplayOption,
+  minWidthForGrid: number
+): string {
+  if (display === 'list') {
+    return '';
+  }
+
+  if (display === 'grid') {
+    return CLASSES.displayAsGrid;
+  }
+
+  return parent.clientWidth >= minWidthForGrid ? CLASSES.displayAsGrid : '';
+}
+
+// eslint-disable-next-line unicorn/prefer-export-from
+export { ResizeEvent };

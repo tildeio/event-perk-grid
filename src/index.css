@@ -9,7 +9,19 @@
 }
 
 .epg_cell {
-  border: 1px solid black;
+  padding: 8px;
+}
+
+/*
+ * Ensure we always show the focus ring so that it's obvious something has
+ * happened when the user clicks a cell and keyboard navigation is enabled.
+ */
+.epg_cell:focus {
+  outline: rgb(0 95 204) auto 1px;
+}
+
+.epg_title:empty {
+  display: none;
 }
 
 .epg_grid.epg_display-as-grid {
@@ -19,6 +31,10 @@
       var(--column-count),
       minmax(var(--min-width-package), var(--max-width-package))
     );
+}
+
+.epg_display-as-grid .epg_title:empty {
+  display: unset;
 }
 
 .epg_display-as-grid .epg_rowgroup,
