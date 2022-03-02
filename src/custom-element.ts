@@ -1,20 +1,9 @@
+import { CLASSES } from './css-classes';
 import { fetchData, PerkGridFetchError } from './fetch-data';
-import { render, CLASSES as GRID_CLASSES, DisplayOption } from './render';
+import { render } from './render';
+import { DisplayOption } from './render/types';
 import { PerkGridTypeError } from './types/utils';
 import { createElement } from './utils/rendering';
-
-/**
- * The values listed here are used as CSS classes. See source link for more
- * information.
- */
-export const CLASSES = {
-  /** See the './render' file for more details. */
-  ...GRID_CLASSES,
-  /** The element displayed while the grid is loading */
-  loading: 'epg_loading' as const,
-  /** The element displayed if there is an error while loading the grid */
-  error: 'epg_error' as const,
-};
 
 /**
  * The following dataset properties can be set on the `<perk-grid>` element by
@@ -272,4 +261,4 @@ if (customElements.get('perk-grid')) {
   customElements.define('perk-grid', PerkGrid);
 }
 
-export {};
+export * from './css-classes';
