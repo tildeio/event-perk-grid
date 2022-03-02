@@ -2,27 +2,27 @@
   "name": "event-perk-grid",
   "version": "0.1.7",
   "description": "A utility for reading and displaying Event Perk Grids.",
-  "main": "dist/index.js",
+  "keywords": [],
+  "homepage": "https://tildeio.github.io/event-perk-grid",
+  "bugs": {
+    "url": "https://github.com/tildeio/event-perk-grid/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tildeio/event-perk-grid.git"
+  },
+  "license": "MIT",
+  "author": "Tilde Engineering <engineering@tilde.io> (https://tilde.io)",
   "exports": {
     ".": "./dist/index.js",
     "./custom-element": "./dist/custom-element.js",
     "./index.css": "./dist/index.css"
   },
+  "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "files": [
     "dist/**/*"
   ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/tildeio/event-perk-grid.git"
-  },
-  "keywords": [],
-  "author": "Tilde Engineering <engineering@tilde.io> (https://tilde.io)",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/tildeio/event-perk-grid/issues"
-  },
-  "homepage": "https://tildeio.github.io/event-perk-grid",
   "scripts": {
     "build:test": "webpack --mode development -c webpack.tests.config.js",
     "build:testem": "TESTEM=true webpack --mode development -c webpack.tests.config.js",
@@ -35,10 +35,9 @@
     "lint:fix": "npm-run-all --continue-on-error lint:*:fix",
     "start": "webpack serve --open --mode development -c webpack.tests.config.js",
     "test": "testem",
-    "preversion": "yarn lint && yarn build && yarn test && yarn docs",
-    "prepare": "yarn build",
     "docs": "typedoc",
-    "docs:deploy": "yarn docs && cd docs && yarn ember deploy production"
+    "docs:deploy": "yarn docs && cd docs && yarn ember deploy production",
+    "release": "release-it"
   },
   "devDependencies": {
     "@types/dotenv-webpack": "^7.0.3",
@@ -65,6 +64,8 @@
     "prettier": "^2.5.1",
     "qunit": "^2.17.2",
     "qunit-dom": "^2.0.0",
+    "release-it": "^14.2.1",
+    "release-it-lerna-changelog": "^3.1.0",
     "style-loader": "^3.3.1",
     "stylelint": "^14.4.0",
     "stylelint-config-prettier": "^9.0.3",
@@ -77,11 +78,42 @@
     "webpack-cli": "^4.9.2",
     "webpack-dev-server": "^4.7.4"
   },
-  "volta": {
-    "node": "14.18.3",
-    "yarn": "1.22.17"
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org"
   },
   "msw": {
     "workerDirectory": "tests"
+  },
+  "release-it": {
+    "plugins": {
+      "release-it-lerna-changelog": {
+        "infile": "CHANGELOG.md",
+        "launchEditor": false
+      }
+    },
+    "git": {
+      "tagName": "v${version}"
+    },
+    "github": {
+      "release": true,
+      "tokenRef": "GITHUB_AUTH"
+    },
+    "hooks": {
+      "before:init": [
+        "yarn install",
+        "yarn lint",
+        "yarn build",
+        "yarn test",
+        "yarn docs"
+      ],
+      "after:release": [
+        "yarn docs:deploy",
+        "echo Successfully released ${name} v${version} to ${repo.repository}."
+      ]
+    }
+  },
+  "volta": {
+    "node": "14.18.3",
+    "yarn": "1.22.17"
   }
 }

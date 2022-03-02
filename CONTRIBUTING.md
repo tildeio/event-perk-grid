@@ -25,15 +25,7 @@ See test-setup.ts for information about useful test setup hooks.
 
 ## Publishing
 
-```shell
-git commit
-git push
-yarn login
-yarn publish
-# now check to make sure the published package works
-git push
-git push --tags
-```
+See the [Release](RELEASE.md) guide for details.
 
 ## Running docs server in dev
 
@@ -59,6 +51,8 @@ cd docs && yarn start
 Visit http://localhost:4200/
 
 ## Deploying docs
+
+NOTE: This is done automatically during releases.
 
 ```shell
 yarn docs:deploy
