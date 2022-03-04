@@ -58,7 +58,7 @@ export function footer(data: EventData): HTMLDivElement {
     `${CLASSES.cell} ${CLASSES.rowheader}`,
     { role: 'rowheader' }
   );
-  footerHeader.setAttribute('aria-label', 'Package price');
+  footerHeader.ariaLabel = 'Package price';
 
   footerRow.append(
     footerHeader,
@@ -75,6 +75,7 @@ function packageHeader(pkg: Package, display: DisplayOption) {
     `${CLASSES.cell} ${CLASSES.columnheader} ${CLASSES.package}`,
     { role: 'columnheader' }
   );
+  el.ariaLabel = 'Package';
 
   const name = createElement('div', CLASSES.descriptor, {
     textContent: pkg.name,
@@ -117,6 +118,7 @@ function perkRow(perk: Perk, packages: Package[]) {
     `${CLASSES.cell} ${CLASSES.rowheader} ${CLASSES.perk}`,
     { role: 'rowheader' }
   );
+  rowHeader.ariaLabel = 'Perk';
 
   const description = createElement('div', CLASSES.descriptor, {
     textContent: perk.description,
@@ -187,7 +189,7 @@ function perkValue(perk: Perk, pkg: Package) {
 }
 
 function packageFooter(pkg: Package) {
-  return createElement('div', `${CLASSES.cell} ${CLASSES.package}`, {
+  const el = createElement('div', `${CLASSES.cell} ${CLASSES.package}`, {
     role: 'gridcell',
     textContent: pkg.price.toLocaleString('en-US', {
       style: 'currency',
@@ -196,4 +198,6 @@ function packageFooter(pkg: Package) {
       maximumFractionDigits: 0,
     }),
   });
+  el.ariaLabel = 'Package price';
+  return el;
 }

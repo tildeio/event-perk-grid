@@ -101,6 +101,7 @@ export function render(
     --max-width-package: ${minWidthPackage / minWidthForGrid}fr;
     `
   );
+  grid.ariaLabel = gridTitle || 'Event Perk Grid'; // Fallback if gridTitle is blank
 
   if (isResponsive) {
     makeResponsive(grid, minWidthForGrid);
