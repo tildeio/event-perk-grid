@@ -38,6 +38,10 @@ export const CLASSES = {
   rowheader: 'epg_rowheader' as const,
   /** All gridcell, columnheader, and rowheader elements */
   cell: 'epg_cell' as const,
+  /** The columnheader element containing the grid title, if one is provided. */
+  title: 'epg_title' as const,
+  /** The heading element containing the grid title, if one exists. */
+  caption: 'epg_caption' as const,
   /** All gridcell and columnheader elements related to a Package */
   package: 'epg_package' as const,
   /** All gridcell and rowheader elements related to a Perk */

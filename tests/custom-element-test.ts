@@ -33,7 +33,7 @@ function assertCustomEvent(event: Event): asserts event is CustomEvent {
 async function renderCustomElement(
   context: Context,
   { dataSet, loadingCallback, errorCallback }: RenderOptions = {}
-): Promise<Event> {
+): Promise<HTMLElement> {
   return new Promise((resolve) => {
     const perkGrid = document.createElement('perk-grid');
 
@@ -48,10 +48,33 @@ async function renderCustomElement(
       perkGrid.addEventListener('error', (event) => {
         assertCustomEvent(event);
         errorCallback(event);
+        resolve(perkGrid);
       });
     }
 
-    perkGrid.addEventListener('ready', resolve);
+    const display = dataSet?.display;
+    const isResponsive = !display || display === 'responsive';
+
+    let ready = false;
+    let resized = !isResponsive;
+
+    const shouldResolve = () => ready && resized;
+
+    perkGrid.addEventListener('ready', () => {
+      ready = true;
+      if (shouldResolve()) {
+        resolve(perkGrid);
+      }
+    });
+
+    if (isResponsive) {
+      perkGrid.addEventListener('grid-resize', () => {
+        resized = true;
+        if (shouldResolve()) {
+          resolve(perkGrid);
+        }
+      });
+    }
 
     if (dataSet) {
       Object.entries(dataSet).forEach(([key, value]) => {

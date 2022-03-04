@@ -1,6 +1,6 @@
 import { CLASSES } from '../css-classes';
 import { EventData, Package, Perk } from '../types/data';
-import { createElement } from '../utils/rendering';
+import { createElement } from '../utils/dom';
 import { DisplayOption } from './types';
 
 export function header(
@@ -14,17 +14,21 @@ export function header(
 
   const headerRow = createElement('div', CLASSES.row, { role: 'row' });
 
-  const title = createElement(
+  const titleContainer = createElement(
     'div',
-    `${CLASSES.cell} ${CLASSES.columnheader}`,
-    {
-      role: 'columnheader',
-      textContent: gridTitle,
-    }
+    `${CLASSES.cell} ${CLASSES.columnheader} ${CLASSES.title}`,
+    { role: 'columnheader' }
   );
 
+  if (gridTitle) {
+    const title = createElement('h1', CLASSES.caption, {
+      textContent: gridTitle,
+    });
+    titleContainer.append(title);
+  }
+
   headerRow.append(
-    title,
+    titleContainer,
     ...data.packages.map((pkg) => packageHeader(pkg, display))
   );
   el.append(headerRow);
@@ -54,7 +58,7 @@ export function footer(data: EventData): HTMLDivElement {
     `${CLASSES.cell} ${CLASSES.rowheader}`,
     { role: 'rowheader' }
   );
-  footerHeader.setAttribute('aria-label', 'Package price');
+  footerHeader.ariaLabel = 'Package price';
 
   footerRow.append(
     footerHeader,
@@ -71,6 +75,7 @@ function packageHeader(pkg: Package, display: DisplayOption) {
     `${CLASSES.cell} ${CLASSES.columnheader} ${CLASSES.package}`,
     { role: 'columnheader' }
   );
+  el.ariaLabel = 'Package';
 
   const name = createElement('div', CLASSES.descriptor, {
     textContent: pkg.name,
@@ -113,6 +118,7 @@ function perkRow(perk: Perk, packages: Package[]) {
     `${CLASSES.cell} ${CLASSES.rowheader} ${CLASSES.perk}`,
     { role: 'rowheader' }
   );
+  rowHeader.ariaLabel = 'Perk';
 
   const description = createElement('div', CLASSES.descriptor, {
     textContent: perk.description,
@@ -142,36 +148,48 @@ function perkValue(perk: Perk, pkg: Package) {
     (perkWithValue) => perkWithValue.id === perk.id
   )?.value;
 
-  const el = createElement(
-    'div',
-    `${CLASSES.cell} ${CLASSES.perk} ${CLASSES.perkValue(perk, value)}`,
-    { role: 'gridcell' }
-  );
+  const el = createElement('div', `${CLASSES.cell} ${CLASSES.perk}`, {
+    role: 'gridcell',
+  });
 
+  const span = createElement('span', CLASSES.perkValue(perk, value));
+
+  let included = false;
   let textContent = '\u2715'; // x
 
   switch (perk.type) {
     case 'simple':
       if (value) {
+        included = true;
         textContent = '\u2713'; // check
+        span.ariaLabel = 'included';
+        span.setAttribute('role', 'img');
       }
       break;
     case 'quantity':
     case 'freeform':
       if (value) {
+        included = true;
         textContent = value.toString();
       }
       break;
     // no default
   }
 
-  el.textContent = textContent;
+  if (!included) {
+    span.ariaLabel = 'not included';
+    span.setAttribute('role', 'img');
+  }
+
+  span.textContent = textContent;
+
+  el.append(span);
 
   return el;
 }
 
 function packageFooter(pkg: Package) {
-  return createElement('div', `${CLASSES.cell} ${CLASSES.package}`, {
+  const el = createElement('div', `${CLASSES.cell} ${CLASSES.package}`, {
     role: 'gridcell',
     textContent: pkg.price.toLocaleString('en-US', {
       style: 'currency',
@@ -180,4 +198,6 @@ function packageFooter(pkg: Package) {
       maximumFractionDigits: 0,
     }),
   });
+  el.ariaLabel = 'Package price';
+  return el;
 }

@@ -1,9 +1,9 @@
 import { CLASSES } from './css-classes';
 import { fetchData, PerkGridFetchError } from './fetch-data';
-import { render } from './render';
+import { render, ResizeEvent } from './render';
 import { DisplayOption } from './render/types';
 import { PerkGridTypeError } from './types/utils';
-import { createElement } from './utils/rendering';
+import { createElement } from './utils/dom';
 
 /**
  * The following dataset properties can be set on the `<perk-grid>` element by
@@ -58,6 +58,8 @@ export interface PerkGridDataSet {
   display?: DisplayOption;
 
   /**
+   * Set attribute `data-min-width-perk`.
+   *
    * The minimum width (in pixels) for displaying the Perk header column when
    * the grid is displayed with multiple columns.
    *
@@ -66,9 +68,11 @@ export interface PerkGridDataSet {
    * NOTE: If the `display` option is set to "list", this option will not be
    * used.
    */
-  minWidthPerk?: number | undefined;
+  minWidthPerk?: number;
 
   /**
+   * Set attribute `data-min-width-package`.
+   *
    * The minimum width (in pixels) for displaying the Package columns when
    * the grid is displayed with multiple columns.
    *
@@ -77,7 +81,18 @@ export interface PerkGridDataSet {
    * NOTE: If the `display` option is set to "list", this option will not be
    * used.
    */
-  minWidthPackage?: number | undefined;
+  minWidthPackage?: number;
+
+  /**
+   * Set attribute `data-allow-keyboard-navigation`.
+   *
+   * If true, enables keyboard navigation following WAI-ARIA Authoring Practices.
+   *
+   * Defaults to `true`.
+   *
+   * @link https://www.w3.org/TR/wai-aria-practices-1.1/examples/grid/dataGrids.html
+   */
+  allowKeyboardNavigation?: boolean;
 }
 
 /**
@@ -101,7 +116,7 @@ export class PerkGridError extends Error {
  * });
  * ```
  */
-export type ConnectingEvent = CustomEvent<Record<string, never>>;
+export type ConnectingEvent = CustomEvent<never>;
 
 /**
  * Fired when the `<perk-grid>` element loading state is displayed and just
@@ -117,7 +132,7 @@ export type ConnectingEvent = CustomEvent<Record<string, never>>;
  * });
  * ```
  */
-export type LoadingEvent = CustomEvent<Record<string, never>>;
+export type LoadingEvent = CustomEvent<never>;
 
 /**
  * Fired _if_ there is an error while the `<perk-grid>` element is loading or
@@ -134,7 +149,7 @@ export type LoadingEvent = CustomEvent<Record<string, never>>;
  * });
  * ```
  */
-export type ErrorEvent = CustomEvent<{ detail: unknown }>;
+export type ErrorEvent = CustomEvent<unknown>;
 
 /**
  * Fired when the `<perk-grid>` element has completed loading and rendering the
@@ -150,7 +165,7 @@ export type ErrorEvent = CustomEvent<{ detail: unknown }>;
  * });
  * ```
  */
-export type ReadyEvent = CustomEvent<Record<string, never>>;
+export type ReadyEvent = CustomEvent<never>;
 
 /**
  * Fired when the `<perk-grid>` element is disconnected from the DOM.
@@ -165,7 +180,7 @@ export type ReadyEvent = CustomEvent<Record<string, never>>;
  * });
  * ```
  */
-export type DisconnectedEvent = CustomEvent<Record<string, never>>;
+export type DisconnectedEvent = CustomEvent<never>;
 
 /**
  * The `<perk-grid>` custom element displays a grid of sponsorship packages and
@@ -184,6 +199,7 @@ export class PerkGrid extends HTMLElement {
    * @fires {@link LoadingEvent}
    * @fires {@link ErrorEvent}
    * @fires {@link ReadyEvent}
+   * @fires {@link ResizeEvent}
    */
   async connectedCallback(): Promise<void> {
     this.dispatchEvent(new CustomEvent('connecting') as ConnectingEvent);
@@ -196,6 +212,7 @@ export class PerkGrid extends HTMLElement {
       display,
       minWidthPerk,
       minWidthPackage,
+      allowKeyboardNavigation,
     } = this.dataset as Partial<PerkGridDataSet>;
 
     const placeholder = createElement('div', CLASSES.loading, {
@@ -218,6 +235,7 @@ export class PerkGrid extends HTMLElement {
         display,
         minWidthPerk,
         minWidthPackage,
+        allowKeyboardNavigation,
       });
     } catch (error: unknown) {
       this.dispatchEvent(
@@ -262,3 +280,5 @@ if (customElements.get('perk-grid')) {
 }
 
 export * from './css-classes';
+// eslint-disable-next-line unicorn/prefer-export-from
+export { ResizeEvent };

@@ -21,3 +21,11 @@ export function createElement<K extends keyof HTMLElementTagNameMap>(
 
   return el;
 }
+
+export function isVisible(element: HTMLElement): boolean {
+  return !!(
+    element.offsetWidth ||
+    element.offsetHeight ||
+    element.getClientRects().length > 0
+  );
+}
