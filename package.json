@@ -103,7 +103,6 @@
         "yarn install",
         "yarn lint",
         "yarn build",
-        "yarn test",
         "yarn docs"
       ],
       "after:release": [
