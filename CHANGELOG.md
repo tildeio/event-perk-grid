@@ -1,4 +1,9 @@
 
+## v0.1.9 (2022-03-07)
+
+#### Breaking
+* API requests will now be made to Events App production servers (previously was staging)
+
 ## v0.1.8 (2022-03-04)
 
 #### :rocket: Enhancement
