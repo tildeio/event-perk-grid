@@ -6,6 +6,7 @@
 
 # Generated files
 tests/mockServiceWorker.js
+CHANGELOG.md
 
 ################################################################################
 # Everything below this point is the same as .gitignore
