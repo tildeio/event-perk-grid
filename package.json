@@ -1,6 +1,6 @@
 {
   "name": "event-perk-grid",
-  "version": "0.1.8",
+  "version": "0.1.7",
   "description": "A utility for reading and displaying Event Perk Grids.",
   "keywords": [],
   "homepage": "https://tildeio.github.io/event-perk-grid",
@@ -34,7 +34,8 @@
     "lint": "npm-run-all --aggregate-output --continue-on-error --parallel \"lint:!(fix)\"",
     "lint:fix": "npm-run-all --continue-on-error lint:*:fix",
     "start": "webpack serve --open --mode development -c webpack.tests.config.js",
-    "test": "testem",
+    "test:server": "testem",
+    "test": "testem ci",
     "docs": "typedoc",
     "docs:deploy": "yarn docs && cd docs && yarn ember deploy production",
     "release": "release-it"
@@ -103,6 +104,7 @@
         "yarn install",
         "yarn lint",
         "yarn build",
+        "yarn test",
         "yarn docs"
       ],
       "after:release": [
