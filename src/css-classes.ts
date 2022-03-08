@@ -58,6 +58,8 @@ export const CLASSES = {
     /** All Package/Park "limited" attribute elements */
     limited: 'epg_attributes-limited' as const,
   },
+  /** Elements related to package price. */
+  price: 'epg_price' as const,
   /**
    * @param perk
    * @param value A {@link PerkValue} or undefined. If undefined, the value is falsy.
