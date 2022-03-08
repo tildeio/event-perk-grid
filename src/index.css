@@ -42,6 +42,7 @@
     );
 }
 
-.epg_display-as-grid .epg_package-perk-list {
+.epg_display-as-grid .epg_columnheader .epg_package-perk-list,
+.epg_display-as-grid .epg_columnheader .epg_price {
   display: none;
 }

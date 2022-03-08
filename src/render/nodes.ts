@@ -85,6 +85,7 @@ function packageHeader(pkg: Package, display: DisplayOption) {
 
   if (display !== 'grid') {
     el.append(perkList(pkg));
+    el.append(packagePrice(pkg));
   }
 
   return el;
@@ -191,6 +192,14 @@ function perkValue(perk: Perk, pkg: Package) {
 function packageFooter(pkg: Package) {
   const el = createElement('div', `${CLASSES.cell} ${CLASSES.package}`, {
     role: 'gridcell',
+  });
+  el.ariaLabel = 'Package price';
+  el.append(packagePrice(pkg));
+  return el;
+}
+
+function packagePrice(pkg: Package) {
+  return createElement('div', CLASSES.price, {
     textContent: pkg.price.toLocaleString('en-US', {
       style: 'currency',
       currency: 'USD',
@@ -198,6 +207,4 @@ function packageFooter(pkg: Package) {
       maximumFractionDigits: 0,
     }),
   });
-  el.ariaLabel = 'Package price';
-  return el;
 }
