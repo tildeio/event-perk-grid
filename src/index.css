@@ -1,5 +1,4 @@
 .epg_grid {
-  display: grid;
   box-sizing: border-box;
 }
 
@@ -24,22 +23,23 @@
   display: none;
 }
 
-.epg_grid.epg_display-as-grid {
+.epg_display-as-grid .epg_title:empty {
+  display: block;
+}
+
+.epg_display-as-grid .epg_body,
+.epg_display-as-grid .epg_footer {
+  display: block;
+}
+
+.epg_display-as-grid .epg_row {
+  display: grid;
   grid-template-columns:
     minmax(var(--min-width-perk), var(--max-width-perk))
     repeat(
       var(--column-count),
       minmax(var(--min-width-package), var(--max-width-package))
     );
-}
-
-.epg_display-as-grid .epg_title:empty {
-  display: unset;
-}
-
-.epg_display-as-grid .epg_rowgroup,
-.epg_display-as-grid .epg_row {
-  display: contents; /* Also undoes display:none on the body and footer */
 }
 
 .epg_display-as-grid .epg_package-perk-list {
