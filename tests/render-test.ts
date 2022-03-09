@@ -118,7 +118,7 @@ module('render', function (hooks) {
 
       const perkGrid = render(this.element, data, { display: 'list' });
 
-      assertGrid(assert, [['', 'Package 1 Perk 1']], false);
+      assertGrid(assert, [['', 'Package 1 Perk 1 $1,000']], false);
 
       assert.dom(perkGrid).doesNotHaveClass('epg_display-as-grid');
 
@@ -156,7 +156,14 @@ module('render', function (hooks) {
 
       assertGrid(
         assert,
-        [['', 'Package 1 Perk 1', 'Package 2', 'Package 3']],
+        [
+          [
+            '',
+            'Package 1 Perk 1 $1,000',
+            'Package 2 $2,000',
+            'Package 3 $3,000',
+          ],
+        ],
         false
       );
 
@@ -175,7 +182,14 @@ module('render', function (hooks) {
 
       assertGrid(
         assert,
-        [['Title', 'Package 1 Perk 1', 'Package 2', 'Package 3']],
+        [
+          [
+            'Title',
+            'Package 1 Perk 1 $1,000',
+            'Package 2 $2,000',
+            'Package 3 $3,000',
+          ],
+        ],
         false
       );
 
