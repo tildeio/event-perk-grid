@@ -14,6 +14,21 @@ export interface RenderOptions {
   gridTitle?: string | undefined;
 
   /**
+   * The text that will be used to indicate a package or perk is only available
+   * in limited quantities.
+   *
+   * Defaults to `'Limited quantities'`
+   */
+  limitedText?: string | undefined;
+
+  /**
+   * The text that will be used to indicate a package or perk is sold out.
+   *
+   * Defaults to `'Sold out'`
+   */
+  soldOutText?: string | undefined;
+
+  /**
    * Choose one of three options:
    * - "grid": The grid will always be displayed multiple columns.
    * - "list": The grid will be collapsed into a single column of packages. Each
@@ -73,6 +88,8 @@ export function render(
   data: EventData,
   {
     gridTitle = '',
+    limitedText = 'Limited quantities',
+    soldOutText = 'Sold out',
     display = 'responsive',
     minWidthPerk = 200,
     minWidthPackage = 100,
@@ -107,10 +124,16 @@ export function render(
     makeResponsive(grid, minWidthForGrid);
   }
 
-  grid.append(header(gridTitle, data, display));
+  const options = {
+    display,
+    limitedText,
+    soldOutText,
+  };
+
+  grid.append(header(gridTitle, data, options));
 
   if (!isList) {
-    grid.append(body(data), footer(data));
+    grid.append(body(data, options), footer(data));
   }
 
   parent.replaceChildren(grid);

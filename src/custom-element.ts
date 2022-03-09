@@ -1,6 +1,6 @@
 import { CLASSES } from './css-classes';
 import { fetchData, PerkGridFetchError } from './fetch-data';
-import { render, ResizeEvent } from './render';
+import { render, RenderOptions, ResizeEvent } from './render';
 import { DisplayOption } from './render/types';
 import { PerkGridTypeError } from './types/utils';
 import { createElement } from './utils/dom';
@@ -36,6 +36,23 @@ export interface PerkGridDataSet {
    * Optional error text to override the default text.
    */
   errorText?: string;
+
+  /**
+   * Set attribute `data-limited-text`.
+   * The text that will be used to indicate a package or perk is only available
+   * in limited quantities.
+   *
+   * Defaults to `'Limited quantities'`
+   */
+  limitedText?: string;
+
+  /**
+   * Set attribute `data-sold-out-text`.
+   * The text that will be used to indicate a package or perk is sold out.
+   *
+   * Defaults to `'Sold out'`
+   */
+  soldOutText?: string;
 
   /**
    * Set attribute `data-display`.
@@ -209,6 +226,8 @@ export class PerkGrid extends HTMLElement {
       gridTitle,
       placeholderText,
       errorText,
+      limitedText,
+      soldOutText,
       display,
       minWidthPerk,
       minWidthPackage,
@@ -230,13 +249,17 @@ export class PerkGrid extends HTMLElement {
 
     try {
       const data = await fetchData(eventId);
-      render(this, data, {
+      // Required here to ensure we always thread through render options
+      const options: Required<RenderOptions> = {
         gridTitle,
+        limitedText,
+        soldOutText,
         display,
         minWidthPerk,
         minWidthPackage,
         allowKeyboardNavigation,
-      });
+      };
+      render(this, data, options);
     } catch (error: unknown) {
       this.dispatchEvent(
         new CustomEvent('error', { detail: error }) as ErrorEvent
