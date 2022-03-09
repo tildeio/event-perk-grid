@@ -1,4 +1,18 @@
 
+
+## v0.1.10 (2022-03-09)
+
+#### :boom: Breaking Change
+* [#6](https://github.com/tildeio/event-perk-grid/pull/6) Display package price in list view ([@gitKrystan](https://github.com/gitKrystan))
+* [#5](https://github.com/tildeio/event-perk-grid/pull/5) Remove `display: contents` from rows and rowgroups. ([@gitKrystan](https://github.com/gitKrystan))
+
+#### :rocket: Enhancement
+* [#7](https://github.com/tildeio/event-perk-grid/pull/7) Allow for custom limited/sold-out text ([@gitKrystan](https://github.com/gitKrystan))
+* [#6](https://github.com/tildeio/event-perk-grid/pull/6) Display package price in list view ([@gitKrystan](https://github.com/gitKrystan))
+
+#### Committers: 1
+- Krystan HuffMenne ([@gitKrystan](https://github.com/gitKrystan))
+
 ## v0.1.9 (2022-03-07)
 
 #### Breaking
