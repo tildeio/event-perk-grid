@@ -3,10 +3,16 @@ import { EventData, Package, Perk } from '../types/data';
 import { createElement } from '../utils/dom';
 import { DisplayOption } from './types';
 
+type NodeOptions = {
+  display: DisplayOption;
+  limitedText: string;
+  soldOutText: string;
+};
+
 export function header(
   gridTitle: string,
   data: EventData,
-  display: DisplayOption
+  options: NodeOptions
 ): HTMLDivElement {
   const el = createElement('div', `${CLASSES.rowgroup} ${CLASSES.header}`, {
     role: 'rowgroup',
@@ -29,19 +35,19 @@ export function header(
 
   headerRow.append(
     titleContainer,
-    ...data.packages.map((pkg) => packageHeader(pkg, display))
+    ...data.packages.map((pkg) => packageHeader(pkg, options))
   );
   el.append(headerRow);
 
   return el;
 }
 
-export function body(data: EventData): HTMLDivElement {
+export function body(data: EventData, options: NodeOptions): HTMLDivElement {
   const el = createElement('div', `${CLASSES.rowgroup} ${CLASSES.body}`, {
     role: 'rowgroup',
   });
 
-  el.append(...data.perks.map((perk) => perkRow(perk, data.packages)));
+  el.append(...data.perks.map((perk) => perkRow(perk, data.packages, options)));
 
   return el;
 }
@@ -69,7 +75,7 @@ export function footer(data: EventData): HTMLDivElement {
   return el;
 }
 
-function packageHeader(pkg: Package, display: DisplayOption) {
+function packageHeader(pkg: Package, options: NodeOptions) {
   const el = createElement(
     'div',
     `${CLASSES.cell} ${CLASSES.columnheader} ${CLASSES.package}`,
@@ -81,17 +87,17 @@ function packageHeader(pkg: Package, display: DisplayOption) {
     textContent: pkg.name,
   });
 
-  el.append(name, attributes(pkg));
+  el.append(name, attributes(pkg, options));
 
-  if (display !== 'grid') {
-    el.append(perkList(pkg));
+  if (options.display !== 'grid') {
+    el.append(perkList(pkg, options));
     el.append(packagePrice(pkg));
   }
 
   return el;
 }
 
-function perkList(pkg: Package) {
+function perkList(pkg: Package, options: NodeOptions) {
   const el = createElement('ul', CLASSES.packagePerkList);
 
   el.append(
@@ -102,7 +108,7 @@ function perkList(pkg: Package) {
         textContent: perk.description,
       });
 
-      perkEl.append(description, attributes(perk));
+      perkEl.append(description, attributes(perk, options));
 
       return perkEl;
     })
@@ -111,7 +117,7 @@ function perkList(pkg: Package) {
   return el;
 }
 
-function perkRow(perk: Perk, packages: Package[]) {
+function perkRow(perk: Perk, packages: Package[], options: NodeOptions) {
   const el = createElement('div', CLASSES.row, { role: 'row' });
 
   const rowHeader = createElement(
@@ -125,20 +131,23 @@ function perkRow(perk: Perk, packages: Package[]) {
     textContent: perk.description,
   });
 
-  rowHeader.append(description, attributes(perk));
+  rowHeader.append(description, attributes(perk, options));
   el.append(rowHeader, ...packages.map((pkg) => perkValue(perk, pkg)));
 
   return el;
 }
 
-function attributes(item: Perk | Package) {
+function attributes(
+  item: Perk | Package,
+  { limitedText, soldOutText }: NodeOptions
+) {
   const el = createElement('div', CLASSES.attributes.container);
   if (item.soldOut) {
     el.classList.add(CLASSES.attributes.soldOut);
-    el.textContent = 'Sold out';
+    el.textContent = soldOutText;
   } else if (item.limited) {
     el.classList.add(CLASSES.attributes.limited);
-    el.textContent = 'Limited quantities';
+    el.textContent = limitedText;
   }
 
   return el;
