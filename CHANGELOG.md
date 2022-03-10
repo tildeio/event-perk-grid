@@ -1,5 +1,14 @@
 
 
+
+## v0.1.11 (2022-03-10)
+
+#### :bug: Bug Fix
+* [#8](https://github.com/tildeio/event-perk-grid/pull/8) Fix DisplayOption type issue ([@gitKrystan](https://github.com/gitKrystan))
+
+#### Committers: 1
+- Krystan HuffMenne ([@gitKrystan](https://github.com/gitKrystan))
+
 ## v0.1.10 (2022-03-09)
 
 #### :boom: Breaking Change
