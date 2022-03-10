@@ -1,7 +1,6 @@
 import { CLASSES } from './css-classes';
 import { fetchData, PerkGridFetchError } from './fetch-data';
-import { render, RenderOptions, ResizeEvent } from './render';
-import { DisplayOption } from './render/types';
+import { render, DisplayOption, RenderOptions, ResizeEvent } from './render';
 import { PerkGridTypeError } from './types/utils';
 import { createElement } from './utils/dom';
 
@@ -304,4 +303,4 @@ if (customElements.get('perk-grid')) {
 
 export * from './css-classes';
 // eslint-disable-next-line unicorn/prefer-export-from
-export { ResizeEvent };
+export { ResizeEvent, DisplayOption };

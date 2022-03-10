@@ -1,7 +1,8 @@
 import { CLASSES } from '../css-classes';
 import { EventData, Package, Perk } from '../types/data';
 import { createElement } from '../utils/dom';
-import { DisplayOption } from './types';
+
+type DisplayOption = 'responsive' | 'grid' | 'list';
 
 type NodeOptions = {
   display: DisplayOption;
