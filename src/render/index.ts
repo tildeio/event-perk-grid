@@ -4,7 +4,8 @@ import { createElement } from '../utils/dom';
 import enableKeyboardNav from './enable-keyboard-nav';
 import { makeResponsive, ResizeEvent } from './make-responsive';
 import { body, footer, header } from './nodes';
-import { DisplayOption } from './types';
+
+export type DisplayOption = 'responsive' | 'grid' | 'list';
 
 export interface RenderOptions {
   /**
