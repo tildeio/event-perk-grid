@@ -50,7 +50,7 @@ export function resumeTest(): void {
 
 export function setupTest(hooks: NestedHooks): void {
   hooks.beforeEach(function (this: TestContext, assert) {
-    // eslint-disable-next-line unicorn/no-this-assignment
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     currentContext = this;
     let resume: undefined | (() => void);
     this.resumeTest = function globalResumeTest() {
