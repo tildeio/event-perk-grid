@@ -47,6 +47,7 @@ module.exports = {
     'unicorn/no-array-for-each': 'off',
     'unicorn/no-static-only-class': 'off',
     'unicorn/no-null': 'off',
+    'unicorn/no-this-assignment': 'off',
   },
   overrides: [
     {
