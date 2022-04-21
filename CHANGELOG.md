@@ -1,6 +1,18 @@
 
 
 
+
+## v0.1.12 (2022-04-21)
+
+#### :rocket: Enhancement
+* [#15](https://github.com/tildeio/event-perk-grid/pull/15) DOM fixes ([@gitKrystan](https://github.com/gitKrystan))
+
+#### :bug: Bug Fix
+* [#15](https://github.com/tildeio/event-perk-grid/pull/15) DOM fixes ([@gitKrystan](https://github.com/gitKrystan))
+
+#### Committers: 1
+- Krystan HuffMenne ([@gitKrystan](https://github.com/gitKrystan))
+
 ## v0.1.11 (2022-03-10)
 
 #### :bug: Bug Fix
