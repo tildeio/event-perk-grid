@@ -46,6 +46,8 @@ export const CLASSES = {
   package: 'epg_package' as const,
   /** All gridcell and rowheader elements related to a Perk */
   perk: 'epg_perk' as const,
+  /** All gridcell elements related to Package Perks */
+  packagePerk: 'epg_package-perk' as const,
   /** Lists of perks within the package header elements */
   packagePerkList: 'epg_package-perk-list' as const,
   /** All Package Name or Perk Description elements */

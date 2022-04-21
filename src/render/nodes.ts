@@ -159,9 +159,13 @@ function perkValue(perk: Perk, pkg: Package) {
     (perkWithValue) => perkWithValue.id === perk.id
   )?.value;
 
-  const el = createElement('div', `${CLASSES.cell} ${CLASSES.perk}`, {
-    role: 'gridcell',
-  });
+  const el = createElement(
+    'div',
+    `${CLASSES.cell} ${CLASSES.perk} ${CLASSES.packagePerk}`,
+    {
+      role: 'gridcell',
+    }
+  );
 
   const span = createElement('span', CLASSES.perkValue(perk, value));
 
