@@ -88,7 +88,8 @@ function packageHeader(pkg: Package, options: NodeOptions) {
     textContent: pkg.name,
   });
 
-  el.append(name, attributes(pkg, options));
+  el.append(name);
+  maybeAppendAttributes(el, pkg, options);
 
   if (options.display !== 'grid') {
     el.append(perkList(pkg, options));
@@ -109,7 +110,8 @@ function perkList(pkg: Package, options: NodeOptions) {
         textContent: perk.description,
       });
 
-      perkEl.append(description, attributes(perk, options));
+      perkEl.append(description);
+      maybeAppendAttributes(perkEl, perk, options);
 
       return perkEl;
     })
@@ -132,26 +134,29 @@ function perkRow(perk: Perk, packages: Package[], options: NodeOptions) {
     textContent: perk.description,
   });
 
-  rowHeader.append(description, attributes(perk, options));
+  rowHeader.append(description);
+  maybeAppendAttributes(rowHeader, perk, options);
   el.append(rowHeader, ...packages.map((pkg) => perkValue(perk, pkg)));
 
   return el;
 }
 
-function attributes(
+function maybeAppendAttributes(
+  parent: HTMLElement,
   item: Perk | Package,
   { limitedText, soldOutText }: NodeOptions
 ) {
-  const el = createElement('div', CLASSES.attributes.container);
-  if (item.soldOut) {
-    el.classList.add(CLASSES.attributes.soldOut);
-    el.textContent = soldOutText;
-  } else if (item.limited) {
-    el.classList.add(CLASSES.attributes.limited);
-    el.textContent = limitedText;
+  if (item.soldOut || item.limited) {
+    const el = createElement('div', CLASSES.attributes.container);
+    if (item.soldOut) {
+      el.classList.add(CLASSES.attributes.soldOut);
+      el.textContent = soldOutText;
+    } else if (item.limited) {
+      el.classList.add(CLASSES.attributes.limited);
+      el.textContent = limitedText;
+    }
+    parent.append(el);
   }
-
-  return el;
 }
 
 function perkValue(perk: Perk, pkg: Package) {
@@ -159,9 +164,13 @@ function perkValue(perk: Perk, pkg: Package) {
     (perkWithValue) => perkWithValue.id === perk.id
   )?.value;
 
-  const el = createElement('div', `${CLASSES.cell} ${CLASSES.perk}`, {
-    role: 'gridcell',
-  });
+  const el = createElement(
+    'div',
+    `${CLASSES.cell} ${CLASSES.perk} ${CLASSES.packagePerk}`,
+    {
+      role: 'gridcell',
+    }
+  );
 
   const span = createElement('span', CLASSES.perkValue(perk, value));
 
